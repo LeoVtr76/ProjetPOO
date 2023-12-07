@@ -3,6 +3,8 @@
 #include "PersonnelPanel.h"
 #include "CommandePanel.h"
 #include "ClientPanel.h"
+#include "StockPanel.h"
+#include "NouvelArticlePanel.h"
 // Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
@@ -13,11 +15,12 @@ namespace Corbeille5 {
     public:
         MyForm() {
             InitializeComponent();
+            //MainPanel event
             mainPanel->PersonnelClicked += gcnew System::EventHandler(this, &MyForm::ShowPersonnelPanel);
             mainPanel->StockClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
             mainPanel->CommandClicked += gcnew System::EventHandler(this, &MyForm::ShowCommandPanel);
             mainPanel->ClientClicked += gcnew System::EventHandler(this, &MyForm::ShowClientPanel);
-            // Abonnez-vous à d'autres événements de mainPanel ici.
+
             this->MinimumSize = System::Drawing::Size(800, 600);
         }
 
@@ -31,9 +34,10 @@ namespace Corbeille5 {
     private:
         System::ComponentModel::Container^ components;
         MainPanel^ mainPanel;
+        StockPanel^ stockPanel;
 
         void InitializeComponent() {
-            this->mainPanel = (gcnew MainPanel());
+            this->mainPanel = (gcnew MainPanel());  
             this->Controls->Add(this->mainPanel);
             this->mainPanel->Dock = DockStyle::Fill;
             this->Text = L"MyForm";
@@ -51,9 +55,17 @@ namespace Corbeille5 {
         void ShowStockPanel(Object^ sender, EventArgs^ e) {
             StockPanel^ stockPanel = gcnew StockPanel();
             stockPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            stockPanel->NewArticleButtonClicked+= gcnew EventHandler(this, &MyForm::ShowNewArticlePanel);
             this->Controls->Clear();
             this->Controls->Add(stockPanel);
             stockPanel->Dock = DockStyle::Fill;
+        }
+        void ShowNewArticlePanel(Object^ sender, EventArgs^ e) {
+            NewArticlePanel^ newArticlePanel = gcnew NewArticlePanel();
+            newArticlePanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
+            this->Controls->Clear();
+            this->Controls->Add(newArticlePanel);
+            newArticlePanel->Dock = DockStyle::Fill;
         }
         void ShowCommandPanel(Object^ sender, EventArgs^ e) {
             CommandePanel^ commandePanel = gcnew CommandePanel();

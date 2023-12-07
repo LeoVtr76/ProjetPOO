@@ -1,23 +1,22 @@
 #pragma once
+#pragma once
 
-#include "NouvelArticlePanel.h"
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 
 namespace Corbeille5 {
 
-    public ref class StockPanel : public UserControl {
+    public ref class NewArticlePanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
-        event EventHandler^ NewArticleButtonClicked;
-        StockPanel() {
+        NewArticlePanel() {
             InitializeComponent();
-            this->Resize += gcnew EventHandler(this, &StockPanel::OnResize);
+            this->Resize += gcnew EventHandler(this, &NewArticlePanel::OnResize);
         }
 
     protected:
-        ~StockPanel() {
+        ~NewArticlePanel() {
             if (components) {
                 delete components;
             }
@@ -38,7 +37,7 @@ namespace Corbeille5 {
 
             // Création et configuration du label
             Title = (gcnew Label());
-            Title->Text = L"Gestion du stock";
+            Title->Text = L"Nouvel article";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
             Title->Location = Point(20, 20); // Positionnement du titre
@@ -50,16 +49,15 @@ namespace Corbeille5 {
             BackButton->Size = Drawing::Size(75, 23);
             BackButton->Location = Point(20, this->Height - 50); // Positionnement du bouton de retour
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
-            BackButton->Click += gcnew EventHandler(this, &StockPanel::OnBackButtonClicked);
+            BackButton->Click += gcnew EventHandler(this, &NewArticlePanel::OnBackButtonClicked);
 
             // Création et configuration des boutons NewButton et ExistButton
             NewButton = (gcnew Button());
-            NewButton->Text = L"Nouveau Stock";
+            NewButton->Text = L"foo";
             NewButton->Size = Drawing::Size(150, 50);
-            NewButton->Click += gcnew EventHandler(this, &StockPanel::OnNewButtonClicked);
 
             ExistButton = (gcnew Button());
-            ExistButton->Text = L"Stock existant";
+            ExistButton->Text = L"bar";
             ExistButton->Size = Drawing::Size(150, 50);
 
             // Ajout des contrôles au UserControl
@@ -91,9 +89,6 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
-        }
-        void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
-            NewArticleButtonClicked(sender, e);
         }
     };
 }
