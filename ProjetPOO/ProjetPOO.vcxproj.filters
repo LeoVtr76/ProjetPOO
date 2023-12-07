@@ -38,6 +38,15 @@
     <ClInclude Include="MyForm1.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
+    <ClInclude Include="StockPanel.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandePanel.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientPanel.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ProjetPOO.cpp">

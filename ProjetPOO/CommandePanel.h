@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -6,17 +7,16 @@ using namespace System::Drawing;
 
 namespace Corbeille5 {
 
-    public ref class PersonnelPanel : public UserControl {
+    public ref class CommandePanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
-
-        PersonnelPanel() {
+        CommandePanel() {
             InitializeComponent();
-            this->Resize += gcnew EventHandler(this, &PersonnelPanel::OnResize);
+            this->Resize += gcnew EventHandler(this, &CommandePanel::OnResize);
         }
 
     protected:
-        ~PersonnelPanel() {
+        ~CommandePanel() {
             if (components) {
                 delete components;
             }
@@ -37,7 +37,7 @@ namespace Corbeille5 {
 
             // Création et configuration du label
             Title = (gcnew Label());
-            Title->Text = L"Gestion du personnel";
+            Title->Text = L"Gestion des commandes";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
             Title->Location = Point(20, 20); // Positionnement du titre
@@ -49,15 +49,15 @@ namespace Corbeille5 {
             BackButton->Size = Drawing::Size(75, 23);
             BackButton->Location = Point(20, this->Height - 50); // Positionnement du bouton de retour
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
-            BackButton->Click += gcnew EventHandler(this, &PersonnelPanel::OnBackButtonClicked);
+            BackButton->Click += gcnew EventHandler(this, &CommandePanel::OnBackButtonClicked);
 
             // Création et configuration des boutons NewButton et ExistButton
             NewButton = (gcnew Button());
-            NewButton->Text = L"Nouveau Personnel";
+            NewButton->Text = L"Nouvelle Commande";
             NewButton->Size = Drawing::Size(150, 50);
 
             ExistButton = (gcnew Button());
-            ExistButton->Text = L"Personnel existant";
+            ExistButton->Text = L"Commande existante";
             ExistButton->Size = Drawing::Size(150, 50);
 
             // Ajout des contrôles au UserControl

@@ -1,6 +1,8 @@
 #pragma once
 #include "MainPanel.h"
 #include "PersonnelPanel.h"
+#include "CommandePanel.h"
+#include "ClientPanel.h"
 // Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
@@ -13,6 +15,8 @@ namespace Corbeille5 {
             InitializeComponent();
             mainPanel->PersonnelClicked += gcnew System::EventHandler(this, &MyForm::ShowPersonnelPanel);
             mainPanel->StockClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
+            mainPanel->CommandClicked += gcnew System::EventHandler(this, &MyForm::ShowCommandPanel);
+            mainPanel->ClientClicked += gcnew System::EventHandler(this, &MyForm::ShowClientPanel);
             // Abonnez-vous à d'autres événements de mainPanel ici.
             this->MinimumSize = System::Drawing::Size(800, 600);
         }
@@ -51,7 +55,22 @@ namespace Corbeille5 {
             this->Controls->Add(stockPanel);
             stockPanel->Dock = DockStyle::Fill;
         }
+        void ShowCommandPanel(Object^ sender, EventArgs^ e) {
+            CommandePanel^ commandePanel = gcnew CommandePanel();
+            commandePanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            this->Controls->Clear();
+            this->Controls->Add(commandePanel);
+            commandePanel->Dock = DockStyle::Fill;
 
+        }
+        void ShowClientPanel(Object^ sender, EventArgs^ e) {
+            ClientPanel^ clientPanel = gcnew ClientPanel();
+            clientPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            this->Controls->Clear();
+            this->Controls->Add(clientPanel);
+            clientPanel->Dock = DockStyle::Fill;
+
+        }
         void ShowMainPanel(Object^ sender, EventArgs^ e) {
             this->Controls->Clear();
             this->Controls->Add(mainPanel);
