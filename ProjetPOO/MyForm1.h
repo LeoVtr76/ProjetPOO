@@ -41,6 +41,11 @@ namespace ProjetPOO {
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Button^ button5;
 
 
 	private:
@@ -60,23 +65,27 @@ namespace ProjetPOO {
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// button3
 			// 
-			this->button3->Location = System::Drawing::Point(24, 184);
+			this->button3->Location = System::Drawing::Point(24, 97);
 			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(304, 98);
+			this->button3->Size = System::Drawing::Size(238, 49);
 			this->button3->TabIndex = 4;
 			this->button3->Text = L"button3";
 			this->button3->UseVisualStyleBackColor = true;
-			this->button3->Click += gcnew System::EventHandler(this, &MyForm1::button3_Click);
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(355, 184);
+			this->button4->Location = System::Drawing::Point(393, 97);
 			this->button4->Name = L"button4";
-			this->button4->Size = System::Drawing::Size(304, 98);
+			this->button4->Size = System::Drawing::Size(268, 49);
 			this->button4->TabIndex = 3;
 			this->button4->Text = L"button4";
 			this->button4->UseVisualStyleBackColor = true;
@@ -98,13 +107,62 @@ namespace ProjetPOO {
 			this->label1->Size = System::Drawing::Size(173, 25);
 			this->label1->TabIndex = 6;
 			this->label1->Text = L"Gestion du stock";
-			this->label1->Click += gcnew System::EventHandler(this, &MyForm1::label1_Click);
+			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(194, 188);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(268, 49);
+			this->button2->TabIndex = 7;
+			this->button2->Text = L"button2";
+			this->button2->UseVisualStyleBackColor = true;
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(19, 69);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(159, 25);
+			this->label2->TabIndex = 8;
+			this->label2->Text = L"Nom de l\'article";
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(388, 69);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(159, 25);
+			this->label3->TabIndex = 9;
+			this->label3->Text = L"Nom de l\'article";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->Location = System::Drawing::Point(189, 160);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(159, 25);
+			this->label4->TabIndex = 10;
+			this->label4->Text = L"Nom de l\'article";
+			// 
+			// button5
+			// 
+			this->button5->Location = System::Drawing::Point(164, 259);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(324, 73);
+			this->button5->TabIndex = 11;
+			this->button5->Text = L"button5";
+			this->button5->UseVisualStyleBackColor = true;
 			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(12, 25);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(690, 406);
+			this->Controls->Add(this->button5);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button3);
@@ -116,9 +174,5 @@ namespace ProjetPOO {
 
 		}
 #pragma endregion
-private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-}
 };
 }
