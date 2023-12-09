@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClInclude Include="ClientPanel.h" />
     <ClInclude Include="CommandePanel.h" />
+    <ClInclude Include="DatabaseManager.h" />
     <ClInclude Include="MainPanel.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
@@ -135,6 +136,7 @@
     <ClInclude Include="MyForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="NewStaffPanel.h" />
     <ClInclude Include="NouvelArticlePanel.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PersonnelPanel.h" />
@@ -143,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="MyForm1.cpp" />
     <ClCompile Include="pch.cpp">

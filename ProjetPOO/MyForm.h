@@ -5,6 +5,7 @@
 #include "ClientPanel.h"
 #include "StockPanel.h"
 #include "NouvelArticlePanel.h"
+#include "NewStaffPanel.h"
 // Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
@@ -48,9 +49,17 @@ namespace Corbeille5 {
         void ShowPersonnelPanel(Object^ sender, EventArgs^ e) {
             PersonnelPanel^ personnelPanel = gcnew PersonnelPanel();
             personnelPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            personnelPanel->NewStaffButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowNewStaffPanel);
             this->Controls->Clear();
             this->Controls->Add(personnelPanel);
             personnelPanel->Dock = DockStyle::Fill;
+        }
+        void ShowNewStaffPanel(Object^ sender, EventArgs^ e) {
+            NewStaffPanel^ newStaffPanel = gcnew NewStaffPanel();
+            newStaffPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
+            this->Controls->Clear();
+            this->Controls->Add(newStaffPanel);
+            newStaffPanel->Dock = DockStyle::Fill;
         }
         void ShowStockPanel(Object^ sender, EventArgs^ e) {
             StockPanel^ stockPanel = gcnew StockPanel();

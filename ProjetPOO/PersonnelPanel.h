@@ -9,6 +9,7 @@ namespace Corbeille5 {
     public ref class PersonnelPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ NewStaffButtonClicked;
 
         PersonnelPanel() {
             InitializeComponent();
@@ -55,6 +56,7 @@ namespace Corbeille5 {
             NewButton = (gcnew Button());
             NewButton->Text = L"Nouveau Personnel";
             NewButton->Size = Drawing::Size(150, 50);
+            NewButton->Click += gcnew EventHandler(this, &PersonnelPanel::OnNewButtonClicked);
 
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Personnel existant";
@@ -89,6 +91,9 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
+            NewStaffButtonClicked(sender, e);
         }
     };
 }

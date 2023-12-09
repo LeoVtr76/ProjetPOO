@@ -32,6 +32,7 @@ namespace Corbeille5 {
         TextBox^ TextBoxArticlePrice;
         Label^ LabelArticlePrice;
         Button^ BackButton;
+        Button^ ValidateButton;
 
         void InitializeComponent() {
             // Configuration du UserControl
@@ -54,7 +55,7 @@ namespace Corbeille5 {
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
             BackButton->Click += gcnew EventHandler(this, &NewArticlePanel::OnBackButtonClicked);
 
-            // Création des TextBox et des Label
+            // Création des TextBox et des Label    
             TextBoxArticleName = CreateTextBox();
             LabelArticleName = CreateLabel(L"Nom de l'article");
             TextBoxArticleAmount = CreateTextBox();
@@ -62,6 +63,8 @@ namespace Corbeille5 {
             TextBoxArticlePrice = CreateTextBox();
             LabelArticlePrice = CreateLabel(L"Prix de l'article");
 
+            ValidateButton = CreateButton(L"Valider");
+            ValidateButton->Click += gcnew System::EventHandler(this, &NewArticlePanel::OnValidateButtonClicked);
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
             this->Controls->Add(BackButton);
@@ -71,6 +74,7 @@ namespace Corbeille5 {
             this->Controls->Add(LabelArticleAmount);
             this->Controls->Add(TextBoxArticlePrice);
             this->Controls->Add(LabelArticlePrice);
+            this->Controls->Add(ValidateButton);
 
             AdjustControlPositions();
         }
@@ -80,7 +84,13 @@ namespace Corbeille5 {
             textBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right);
             return textBox;
         }
-
+        Button^ CreateButton(String^ text) {
+            Button^ button = gcnew Button();
+            button->Text = text;
+            button->AutoSize = true;
+            button->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Right);
+            return button;
+        }
         Label^ CreateLabel(String^ text) {
             Label^ label = gcnew Label();
             label->Text = text;
@@ -114,10 +124,14 @@ namespace Corbeille5 {
 
             // Réajuster la position du bouton de retour en bas à gauche
             BackButton->Location = Point(spacing, this->Height - BackButton->Height - spacing);
+            ValidateButton->Location = Point(this->Width - ValidateButton->Width - spacing, this->Height - ValidateButton->Height - spacing);
         }
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnValidateButtonClicked(Object^ sender, EventArgs^ e) {
+           //Requete SQL pour ajouter le boug
         }
     };
 }
