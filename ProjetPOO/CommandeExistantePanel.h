@@ -14,7 +14,7 @@ namespace Corbeille5 {
 
 		CommandeExistantePanel() {
 			InitializeComponent();
-			//this->Resize += gcnew EventHandler(this, &CommandeExistantePanel::OnResize);
+			this->Resize += gcnew EventHandler(this, &CommandeExistantePanel::OnResize);
 		}
 	protected:
 		~CommandeExistantePanel() {
@@ -68,7 +68,6 @@ namespace Corbeille5 {
 			BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
 			BackButton->Click += gcnew EventHandler(this, &CommandeExistantePanel::OnBackButtonClicked);
 
-
 			listBox1 = (gcnew ListBox());
 			listBox1->TabIndex = 1;
 			listBox1->Size = Drawing::Size(200, 130);
@@ -117,21 +116,22 @@ namespace Corbeille5 {
 			RefBox->Text = L"BonjourLeMonde!";
 			RefBox->TabIndex = 5;
 			RefBox->Size = Drawing::Size(140, 60);
-			RefBox->Location = Point(this->Width - RefBox->Width - 100, 180);
-			RefBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			RefBox->Location = Point(this->Width - RefBox->Width + 220, 180);
+			RefBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 			RefBox->ReadOnly = true;
+			RefBox->Enabled = false;
 
 			ArtBox = (gcnew ComboBox());
 			ArtBox->TabIndex = 6;
 			ArtBox->Size = Drawing::Size(140, 60);
-			ArtBox->Location = Point(this->Width - ArtBox->Width - 100, 270);
-			ArtBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			ArtBox->Location = Point(this->Width - ArtBox->Width + 220, 270);
+			ArtBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 
 			MontBox = (gcnew TextBox());
 			MontBox->TabIndex = 7;
 			MontBox->Size = Drawing::Size(140, 60);
-			MontBox->Location = Point(this->Width - MontBox->Width - 100, 360);
-			MontBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			MontBox->Location = Point(this->Width - MontBox->Width + 220, 360);
+			MontBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 			MontBox->ReadOnly = true;
 
 			AdrLivBox = (gcnew TextBox());
@@ -158,20 +158,20 @@ namespace Corbeille5 {
 			RefLab = (gcnew Label());
 			RefLab->Text = L"Référence :";
 			RefLab->Size = Drawing::Size(80, 60);
-			RefLab->Location = Point(this->Width - RefLab->Width - 160, 160);
-			RefLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			RefLab->Location = Point(this->Width - RefLab->Width + 160, 160);
+			RefLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 
 			ArtLab = (gcnew Label());
 			ArtLab->Text = L"Article(s) :";
 			ArtLab->Size = Drawing::Size(80, 60);
-			ArtLab->Location = Point(this->Width - ArtLab->Width - 160, 250);
-			ArtLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			ArtLab->Location = Point(this->Width - ArtLab->Width + 160, 250);
+			ArtLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 
 			MontLab = (gcnew Label());
 			MontLab->Text = L"Montant de la commande :";
 			MontLab->Size = Drawing::Size(140, 60);
-			MontLab->Location = Point(this->Width - MontLab->Width - 100, 340);
-			MontLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			MontLab->Location = Point(this->Width - MontLab->Width + 220, 340);
+			MontLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 
 			AdrLivLab = (gcnew Label());
 			AdrLivLab->Text = L"Adresse de livraison :";
@@ -215,22 +215,36 @@ namespace Corbeille5 {
 			this->Controls->Add(DatePaiLab);
 
 
-			//AdjustButtonSizeAndPosition();
+			AdjustButtonSizeAndPosition();
+		}
+
+		
+		void OnResize(Object^ sender, EventArgs^ e) {
+			AdjustButtonSizeAndPosition();
 		}
 		
-		/*void OnResize(Object^ sender, EventArgs^ e) {
-			AdjustButtonSizeAndPisition();
-		}*/
-		
 
-		/*void AdjustButtonSizeAndPosition() {
+		void AdjustButtonSizeAndPosition() {
 			int spacing = 20;
-			int buttonWidth = (this->Width - 3 * spacing) / 2;
-			int buttonHeight = 50;
-			int buttonY = (this->Height - buttonHeight) / 2;
+			int textBoxHeight = 60;
+			int textBoxWidth = 140;
+			double scale = 0.5;
+			
+			int newWidth = textBoxWidth + ((this->Width - 800)* scale);
+
+			newWidth = Math::Max(newWidth, textBoxHeight);
+
+			RefBox->Size = Drawing::Size(newWidth, textBoxHeight);
+			ArtBox->Size = Drawing::Size(newWidth, textBoxHeight);
+			MontBox->Size = Drawing::Size(newWidth, textBoxHeight);
+			AdrLivBox->Size = Drawing::Size(newWidth, textBoxHeight);
+			DateLivBox->Size = Drawing::Size(newWidth, textBoxHeight);
+			DatePaiBox->Size = Drawing::Size(newWidth, textBoxHeight);
+		}
 
 			
-		}*/
+			
+		
 
 		void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
 			BackButtonClicked(this, e);
@@ -247,5 +261,3 @@ namespace Corbeille5 {
 		}
 	};
 }
-
-
