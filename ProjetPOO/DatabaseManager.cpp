@@ -304,6 +304,29 @@ int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
             connection->Close();
     }
 }
+bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, String^ hireDate) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName AND PERS_DATE_EMB = @hireDate";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@firstName", firstName);
+    command->Parameters->AddWithValue("@lastName", lastName);
+    command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
+
+    try {
+        connection->Open();
+        int count = (int)command->ExecuteScalar();
+        return count > 0;
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return false;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
+
 
 
 

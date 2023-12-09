@@ -21,4 +21,5 @@ public:
     void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId);
     List<String^>^ GetManagers();
     int GetPersonnelId(String^ firstName, String^ lastName);
+    bool PersonnelExists(String^ firstName, String^ lastName, String^ hireDate);
 };

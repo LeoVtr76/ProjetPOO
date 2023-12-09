@@ -1,5 +1,6 @@
 #pragma once
 #include "DatabaseManager.h"
+#include "InfopersonnelForm.h"
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -316,8 +317,15 @@ namespace Corbeille5 {
                     managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
                 }
             }
-            dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
-            
+            InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
+            if (dbManager->PersonnelExists(firstName, lastName, hireDate)) {
+                messageForm->SetMessage("Le personnel existe déjà.");
+            }
+            else {
+                dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
+                messageForm->SetMessage("Le personnel à été ajouté avec succès !");
+            }
+            messageForm->ShowDialog();
         }
     };
 }
