@@ -249,7 +249,29 @@ void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ 
             connection->Close();
     }
 }
+void DatabaseManager::AddClient(String^ firstName, String^ lastName, String^ birthDate, int addressId) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
 
+    String^ commandText = "INSERT INTO client (CLI_PRENOM, CLI_NOM, CLI_DATE_ANNIV, ID_ADRESSE) VALUES (@firstName, @lastName, @birthDate, @addressId)";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+
+    command->Parameters->AddWithValue("@firstName", firstName);
+    command->Parameters->AddWithValue("@lastName", lastName);
+    command->Parameters->AddWithValue("@birthDate", DateTime::Parse(birthDate));
+    command->Parameters->AddWithValue("@addressId", addressId);
+
+    try {
+        connection->Open();
+        command->ExecuteNonQuery();
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
 
 List<String^>^ DatabaseManager::GetManagers() {
     List<String^>^ managerList = gcnew List<String^>();
@@ -306,12 +328,12 @@ int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
 }
 bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, String^ hireDate) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName";
+    String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName AND PERS_DATE_EMB = @hireDate";
         //AND PERS_DATE_EMB = @hireDate";
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
     command->Parameters->AddWithValue("@firstName", firstName);
     command->Parameters->AddWithValue("@lastName", lastName);
-    //command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
+    command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
 
     try {
         connection->Open();
@@ -327,7 +349,28 @@ bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, Strin
             connection->Close();
     }
 }
+bool DatabaseManager::ClientExists(String^ firstName, String^ lastName, String^ birthDate) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT COUNT(*) FROM client WHERE CLI_PRENOM = @firstName AND CLI_NOM = @lastName AND CLI_DATE_ANNIV = @birthDate";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@firstName", firstName);
+    command->Parameters->AddWithValue("@lastName", lastName);
+    command->Parameters->AddWithValue("@birthDate", DateTime::Parse(birthDate));
 
+    try {
+        connection->Open();
+        int count = (int)command->ExecuteScalar();
+        return count > 0;
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return false;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
 
 
 

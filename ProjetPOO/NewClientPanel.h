@@ -15,7 +15,6 @@ namespace Corbeille5 {
         NewClientPanel() {
             InitializeComponent();
             FillCountryComboBox();
-            FillManagerComboBox();
             this->Resize += gcnew EventHandler(this, &NewClientPanel::OnResize);
         }
 
@@ -34,14 +33,10 @@ namespace Corbeille5 {
         TextBox^ textBoxFirstName;
         Label^ labelLastName;
         TextBox^ textBoxLastName;
-        Label^ labelHireDate;
-        TextBox^ textBoxHireDate;
-        Label^ labelHierarchyLevel;
-        TextBox^ textBoxHierarchyLevel;
+        Label^ labelBirthDate;
+        TextBox^ textBoxBirthDate;
 
         // Right side controls
-        Label^ labelManager;
-        ComboBox^ comboBoxManager;
         Label^ labelCountry;
         ComboBox^ comboBoxCountry;
         Label^ labelPostalCode;
@@ -65,15 +60,10 @@ namespace Corbeille5 {
             this->textBoxFirstName = CreateTextBox();
             this->labelLastName = CreateLabel(L"Nom");
             this->textBoxLastName = CreateTextBox();
-            this->labelHireDate = CreateLabel(L"Date de naissance");
-            this->textBoxHireDate = CreateTextBox();
-            this->labelHierarchyLevel = CreateLabel(L"Niveau Hiérarchique");
-            this->textBoxHierarchyLevel = CreateTextBox();
+            this->labelBirthDate = CreateLabel(L"Date de naissance");
+            this->textBoxBirthDate = CreateTextBox();
 
             // Right side controls initialization
-            this->labelManager = CreateLabel(L"Responsable");
-            this->comboBoxManager = CreateComboBox();
-            this->comboBoxManager->DropDownStyle = ComboBoxStyle::DropDownList;
             this->labelCountry = CreateLabel(L"Pays");
             this->comboBoxCountry = CreateComboBox();
             this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewClientPanel::CountrySelectionChanged);
@@ -105,15 +95,6 @@ namespace Corbeille5 {
             this->comboBoxCountry->Items->Clear();
             for each (String ^ countryName in countryList) {
                 this->comboBoxCountry->Items->Add(countryName);
-            }
-        }
-        void NewClientPanel::FillManagerComboBox() {
-            DatabaseManager^ dbManager = gcnew DatabaseManager();
-            List<String^>^ managerList = dbManager->GetManagers();
-
-            this->comboBoxManager->Items->Clear();
-            for each (String ^ fullName in managerList) {
-                this->comboBoxManager->Items->Add(fullName);
             }
         }
         void FillCpComboBox() {
@@ -174,8 +155,7 @@ namespace Corbeille5 {
             this->comboBoxPostalCode->SelectedIndex = -1;
             this->comboBoxCity->SelectedIndex = -1;
             this->textBoxAddress->Clear();
-            this->textBoxHierarchyLevel->Clear();
-            this->textBoxHireDate->Clear();
+            this->textBoxBirthDate->Clear();
         }
         // Adding controls to UserControl
         void AddControlsToPanel() {
@@ -184,14 +164,10 @@ namespace Corbeille5 {
             this->Controls->Add(textBoxFirstName);
             this->Controls->Add(labelLastName);
             this->Controls->Add(textBoxLastName);
-            this->Controls->Add(labelHireDate);
-            this->Controls->Add(textBoxHireDate);
-            this->Controls->Add(labelHierarchyLevel);
-            this->Controls->Add(textBoxHierarchyLevel);
+            this->Controls->Add(labelBirthDate);
+            this->Controls->Add(textBoxBirthDate);
 
             // Right side controls
-            this->Controls->Add(labelManager);
-            this->Controls->Add(comboBoxManager);
             this->Controls->Add(labelCountry);
             this->Controls->Add(comboBoxCountry);
             this->Controls->Add(labelPostalCode);
@@ -231,20 +207,12 @@ namespace Corbeille5 {
             textBoxLastName->Location = Point(margin, labelLastName->Bottom + margin);
             textBoxLastName->Width = leftColumnWidth;
 
-            labelHireDate->Location = Point(margin, textBoxLastName->Bottom + margin);
-            textBoxHireDate->Location = Point(margin, labelHireDate->Bottom + margin);
-            textBoxHireDate->Width = leftColumnWidth;
-
-            labelHierarchyLevel->Location = Point(margin, textBoxHireDate->Bottom + margin);
-            textBoxHierarchyLevel->Location = Point(margin, labelHierarchyLevel->Bottom + margin);
-            textBoxHierarchyLevel->Width = leftColumnWidth;
+            labelBirthDate->Location = Point(margin, textBoxLastName->Bottom + margin);
+            textBoxBirthDate->Location = Point(margin, labelBirthDate->Bottom + margin);
+            textBoxBirthDate->Width = leftColumnWidth;
 
             // Position right column controls
-            labelManager->Location = Point(this->Width / 2 + margin, margin);
-            comboBoxManager->Location = Point(this->Width / 2 + margin, labelManager->Bottom + margin);
-            comboBoxManager->Width = rightColumnWidth;
-
-            labelCountry->Location = Point(this->Width / 2 + margin, comboBoxManager->Bottom + margin);
+            labelCountry->Location = Point(this->Width / 2 + margin, margin);
             comboBoxCountry->Location = Point(this->Width / 2 + margin, labelCountry->Bottom + margin);
             comboBoxCountry->Width = rightColumnWidth;
 
@@ -315,27 +283,16 @@ namespace Corbeille5 {
             // Création du personnel
             String^ firstName = textBoxFirstName->Text;
             String^ lastName = textBoxLastName->Text;
-            String^ hierarchyLevel = textBoxHierarchyLevel->Text;
-            String^ hireDate = textBoxHireDate->Text;
-            int managerId = -1;
-            String^ managerFullName = comboBoxManager->Text;
-            if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
-                array<String^>^ nameParts = managerFullName->Split(' ');
-                if (nameParts->Length >= 2) {
-                    String^ managerFirstName = nameParts[0];
-                    String^ managerLastName = nameParts[1];
-                    managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
-                }
-            }
+            String^ birthDate = textBoxBirthDate->Text;
+
             InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
-            if (dbManager->PersonnelExists(firstName, lastName, hireDate)) {
-                messageForm->SetMessage("Le personnel existe déjà.");
+            if (dbManager->ClientExists(firstName, lastName, birthDate)) {
+                messageForm->SetMessage("Le client existe déjà.");
             }
             else {
-                dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
-                messageForm->SetMessage("Le personnel à été ajouté avec succès !");
+                dbManager->AddClient(firstName, lastName, birthDate, addressId);
+                messageForm->SetMessage("Le client à été ajouté avec succès !");
                 FillCountryComboBox();
-                FillManagerComboBox();
                 ClearFields();
             }
             messageForm->ShowDialog();

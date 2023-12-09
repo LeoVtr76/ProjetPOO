@@ -19,7 +19,9 @@ public:
     void AddCity(String^ cityName, String^ postalCode, String^ countryName);
     int AddAddress(String^ streetNumber, String^ streetName, String^ cityName);
     void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId);
+    void AddClient(String^ firstName, String^ lastName, String^ birthDate, int addressId);
     List<String^>^ GetManagers();
     int GetPersonnelId(String^ firstName, String^ lastName);
     bool PersonnelExists(String^ firstName, String^ lastName, String^ hireDate);
+    bool ClientExists(String^ firstName, String^ lastName, String^ birthDate);
 };
