@@ -213,25 +213,29 @@ int DatabaseManager::AddAddress(String^ streetNumber, String^ streetName, String
             connection->Close();
     }
 }
-void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, Object^ managerId, int addressId) {
+void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
 
-    String^ commandText = "INSERT INTO personnel (PERS_NOM, PERS_PRENOM, PERS_NH, PERS_DATE_EMB, ID_SUPERIEUR, ID_ADRESSE) VALUES (@firstName, @lastName, @hierarchyLevel, @hireDate, @managerId, @addressId)";
+    String^ commandText = "INSERT INTO personnel (PERS_NOM, PERS_PRENOM, PERS_NH, PERS_DATE_EMB, ID_ADRESSE";
+    if (managerId != -1) {
+        commandText += ", ID_SUPERIEUR";
+    }
+    commandText += ") VALUES (@firstName, @lastName, @hierarchyLevel, @hireDate, @addressId";
+    if (managerId != -1) {
+        commandText += ", @managerId";
+    }
+    commandText += ")";
+
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
 
     command->Parameters->AddWithValue("@firstName", firstName);
     command->Parameters->AddWithValue("@lastName", lastName);
     command->Parameters->AddWithValue("@hierarchyLevel", hierarchyLevel);
     command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
-
-    if (managerId == nullptr || managerId->GetType() == DBNull::typeid) {
-        command->Parameters->AddWithValue("@managerId", DBNull::Value);
-    }
-    else {
+    command->Parameters->AddWithValue("@addressId", addressId);
+    if (managerId != -1) {
         command->Parameters->AddWithValue("@managerId", managerId);
     }
-
-    command->Parameters->AddWithValue("@addressId", addressId);
 
     try {
         connection->Open();
@@ -245,6 +249,64 @@ void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ 
             connection->Close();
     }
 }
+
+
+List<String^>^ DatabaseManager::GetManagers() {
+    List<String^>^ managerList = gcnew List<String^>();
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT PERS_PRENOM, PERS_NOM FROM personnel";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    SqlDataAdapter^ da = gcnew SqlDataAdapter(command);
+    DataTable^ dt = gcnew DataTable();
+
+    try {
+        connection->Open();
+        da->Fill(dt);
+
+        for each (DataRow ^ row in dt->Rows) {
+            String^ fullName = row["PERS_PRENOM"]->ToString() + " " + row["PERS_NOM"]->ToString();
+            managerList->Add(fullName);
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+    return managerList;
+}
+int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT ID_PERSONNEL FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@firstName", firstName);
+    command->Parameters->AddWithValue("@lastName", lastName);
+
+    try {
+        connection->Open();
+        Object^ result = command->ExecuteScalar();
+        if (result != nullptr) {
+            return Convert::ToInt32(result);
+        }
+        else {
+            return -1;
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return -1;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
+
+
+
 
 
 

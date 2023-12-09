@@ -18,6 +18,7 @@ public:
     bool CheckCity(String^ countryName,String^ cityName);
     void AddCity(String^ cityName, String^ postalCode, String^ countryName);
     int AddAddress(String^ streetNumber, String^ streetName, String^ cityName);
-    void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, Object^ managerId, int addressId);
-
+    void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId);
+    List<String^>^ GetManagers();
+    int GetPersonnelId(String^ firstName, String^ lastName);
 };

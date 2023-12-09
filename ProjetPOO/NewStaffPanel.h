@@ -14,6 +14,7 @@ namespace Corbeille5 {
         NewStaffPanel() {
             InitializeComponent();
             FillCountryComboBox();
+            FillManagerComboBox();
             this->Resize += gcnew EventHandler(this, &NewStaffPanel::OnResize);
         }
 
@@ -102,6 +103,15 @@ namespace Corbeille5 {
             this->comboBoxCountry->Items->Clear();
             for each (String ^ countryName in countryList) {
                 this->comboBoxCountry->Items->Add(countryName);
+            }
+        }
+        void NewStaffPanel::FillManagerComboBox() {
+            DatabaseManager^ dbManager = gcnew DatabaseManager();
+            List<String^>^ managerList = dbManager->GetManagers();
+
+            this->comboBoxManager->Items->Clear();
+            for each (String ^ fullName in managerList) {
+                this->comboBoxManager->Items->Add(fullName);
             }
         }
         void FillCpComboBox() {
@@ -296,14 +306,18 @@ namespace Corbeille5 {
             String^ lastName = textBoxLastName->Text;
             String^ hierarchyLevel = textBoxHierarchyLevel->Text;
             String^ hireDate = textBoxHireDate->Text;
-            Object^ managerId;
-            if (comboBoxManager->SelectedIndex >= 0) {
-                managerId = comboBoxManager->SelectedItem; 
+            int managerId = -1;
+            String^ managerFullName = comboBoxManager->Text;
+            if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
+                array<String^>^ nameParts = managerFullName->Split(' ');
+                if (nameParts->Length >= 2) {
+                    String^ managerFirstName = nameParts[0];
+                    String^ managerLastName = nameParts[1];
+                    managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
+                }
             }
-            else {
-                managerId = DBNull::Value;
-            }
-            dbManager->AddPersonnel(firstName, lastName,hierarchyLevel,hireDate,managerId, addressId);
+            dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
+            
         }
     };
 }
