@@ -139,6 +139,7 @@
     <ClInclude Include="MyForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="NewClientPanel.h" />
     <ClInclude Include="NewStaffPanel.h" />
     <ClInclude Include="NouvelArticlePanel.h" />
     <ClInclude Include="pch.h" />

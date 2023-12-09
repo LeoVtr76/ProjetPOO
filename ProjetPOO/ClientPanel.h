@@ -12,6 +12,7 @@ namespace Corbeille5 {
     public ref class ClientPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ NewClientButtonClicked;
         ClientPanel() {
             InitializeComponent();
             this->Resize += gcnew EventHandler(this, &ClientPanel::OnResize);
@@ -56,6 +57,7 @@ namespace Corbeille5 {
             NewButton = (gcnew Button());
             NewButton->Text = L"Nouveau client";
             NewButton->Size = Drawing::Size(150, 50);
+            NewButton->Click += gcnew EventHandler(this, &ClientPanel::OnNewButtonClicked);
 
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Client existant";
@@ -90,6 +92,9 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
+            NewClientButtonClicked(sender, e);
         }
     };
 }

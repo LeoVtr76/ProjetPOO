@@ -7,20 +7,20 @@ using namespace System::Drawing;
 
 namespace Corbeille5 {
 
-    public ref class NewStaffPanel : public UserControl {
+    public ref class NewClientPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
         event EventHandler^ ValidateButtonClicked;
 
-        NewStaffPanel() {
+        NewClientPanel() {
             InitializeComponent();
             FillCountryComboBox();
             FillManagerComboBox();
-            this->Resize += gcnew EventHandler(this, &NewStaffPanel::OnResize);
+            this->Resize += gcnew EventHandler(this, &NewClientPanel::OnResize);
         }
 
     protected:
-        ~NewStaffPanel() {
+        ~NewClientPanel() {
             if (components) {
                 delete components;
             }
@@ -65,7 +65,7 @@ namespace Corbeille5 {
             this->textBoxFirstName = CreateTextBox();
             this->labelLastName = CreateLabel(L"Nom");
             this->textBoxLastName = CreateTextBox();
-            this->labelHireDate = CreateLabel(L"Date d'Embauche");
+            this->labelHireDate = CreateLabel(L"Date de naissance");
             this->textBoxHireDate = CreateTextBox();
             this->labelHierarchyLevel = CreateLabel(L"Niveau Hiérarchique");
             this->textBoxHierarchyLevel = CreateTextBox();
@@ -76,10 +76,10 @@ namespace Corbeille5 {
             this->comboBoxManager->DropDownStyle = ComboBoxStyle::DropDownList;
             this->labelCountry = CreateLabel(L"Pays");
             this->comboBoxCountry = CreateComboBox();
-            this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewStaffPanel::CountrySelectionChanged);
+            this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewClientPanel::CountrySelectionChanged);
             this->labelPostalCode = CreateLabel(L"Code Postal");
             this->comboBoxPostalCode = CreateComboBox();
-            this->comboBoxPostalCode->SelectedIndexChanged += gcnew EventHandler(this, &NewStaffPanel::PostalCodeSelectionChanged);
+            this->comboBoxPostalCode->SelectedIndexChanged += gcnew EventHandler(this, &NewClientPanel::PostalCodeSelectionChanged);
             this->labelCity = CreateLabel(L"Ville");
             this->comboBoxCity = CreateComboBox();
             this->labelAddress = CreateLabel(L"Adresse");
@@ -87,9 +87,9 @@ namespace Corbeille5 {
 
             // Bottom controls initialization
             this->buttonBack = CreateButton(L"Retour");
-            this->buttonBack->Click += gcnew EventHandler(this, &NewStaffPanel::OnBackButtonClicked);
+            this->buttonBack->Click += gcnew EventHandler(this, &NewClientPanel::OnBackButtonClicked);
             this->buttonValidate = CreateButton(L"Valider");
-            this->buttonValidate->Click += gcnew EventHandler(this, &NewStaffPanel::OnValidateButtonClicked);
+            this->buttonValidate->Click += gcnew EventHandler(this, &NewClientPanel::OnValidateButtonClicked);
 
             // Add controls to UserControl
             AddControlsToPanel();
@@ -107,7 +107,7 @@ namespace Corbeille5 {
                 this->comboBoxCountry->Items->Add(countryName);
             }
         }
-        void NewStaffPanel::FillManagerComboBox() {
+        void NewClientPanel::FillManagerComboBox() {
             DatabaseManager^ dbManager = gcnew DatabaseManager();
             List<String^>^ managerList = dbManager->GetManagers();
 
@@ -272,7 +272,7 @@ namespace Corbeille5 {
                 // La valeur saisie n'est pas dans la liste
                 // Ajouter le nouveau pays à la base de données
                 DatabaseManager^ dbManager = gcnew DatabaseManager();
-                dbManager->AddCountry(inputCountry);    
+                dbManager->AddCountry(inputCountry);
                 FillCountryComboBox();
             }
         }

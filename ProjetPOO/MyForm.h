@@ -6,6 +6,7 @@
 #include "StockPanel.h"
 #include "NouvelArticlePanel.h"
 #include "NewStaffPanel.h"
+#include "NewClientPanel.h"
 // Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
@@ -56,7 +57,7 @@ namespace Corbeille5 {
         }
         void ShowNewStaffPanel(Object^ sender, EventArgs^ e) {
             NewStaffPanel^ newStaffPanel = gcnew NewStaffPanel();
-            newStaffPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
+            newStaffPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowPersonnelPanel);
             this->Controls->Clear();
             this->Controls->Add(newStaffPanel);
             newStaffPanel->Dock = DockStyle::Fill;
@@ -82,15 +83,21 @@ namespace Corbeille5 {
             this->Controls->Clear();
             this->Controls->Add(commandePanel);
             commandePanel->Dock = DockStyle::Fill;
-
         }
         void ShowClientPanel(Object^ sender, EventArgs^ e) {
             ClientPanel^ clientPanel = gcnew ClientPanel();
             clientPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            clientPanel->NewClientButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowNewClientPanel);
             this->Controls->Clear();
             this->Controls->Add(clientPanel);
             clientPanel->Dock = DockStyle::Fill;
-
+        }
+       void ShowNewClientPanel(Object^ sender, EventArgs^ e) {
+            NewClientPanel^ newClientPanel = gcnew NewClientPanel();
+            newClientPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowClientPanel);
+            this->Controls->Clear();
+            this->Controls->Add(newClientPanel);
+            newClientPanel->Dock = DockStyle::Fill;
         }
         void ShowMainPanel(Object^ sender, EventArgs^ e) {
             this->Controls->Clear();

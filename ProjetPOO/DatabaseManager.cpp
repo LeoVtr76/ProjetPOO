@@ -216,7 +216,7 @@ int DatabaseManager::AddAddress(String^ streetNumber, String^ streetName, String
 void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
 
-    String^ commandText = "INSERT INTO personnel (PERS_NOM, PERS_PRENOM, PERS_NH, PERS_DATE_EMB, ID_ADRESSE";
+    String^ commandText = "INSERT INTO personnel (PERS_PRENOM, PERS_NOM, PERS_NH, PERS_DATE_EMB, ID_ADRESSE";
     if (managerId != -1) {
         commandText += ", ID_SUPERIEUR";
     }
@@ -306,11 +306,12 @@ int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
 }
 bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, String^ hireDate) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName AND PERS_DATE_EMB = @hireDate";
+    String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName";
+        //AND PERS_DATE_EMB = @hireDate";
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
     command->Parameters->AddWithValue("@firstName", firstName);
     command->Parameters->AddWithValue("@lastName", lastName);
-    command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
+    //command->Parameters->AddWithValue("@hireDate", DateTime::Parse(hireDate));
 
     try {
         connection->Open();

@@ -38,7 +38,7 @@ namespace Corbeille5 {
 
             // Création et configuration du label
             Title = (gcnew Label());
-            Title->Text = L"Gestion du personnel";
+            Title->Text = L"Gestion des clients";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
             Title->Location = Point(20, 20); // Positionnement du titre
