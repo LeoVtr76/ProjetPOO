@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -10,6 +9,8 @@ namespace Corbeille5 {
     public ref class CommandePanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ ExistingCommandClicked;
+
         CommandePanel() {
             InitializeComponent();
             this->Resize += gcnew EventHandler(this, &CommandePanel::OnResize);
@@ -59,6 +60,7 @@ namespace Corbeille5 {
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Commande existante";
             ExistButton->Size = Drawing::Size(150, 50);
+            ExistButton->Click += gcnew EventHandler(this, &CommandePanel::OnExistingCommandClicked);
 
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
@@ -89,6 +91,10 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+
+        void OnExistingCommandClicked(Object^ sender, EventArgs^ e) {
+            ExistingCommandClicked(sender, e);
         }
     };
 }

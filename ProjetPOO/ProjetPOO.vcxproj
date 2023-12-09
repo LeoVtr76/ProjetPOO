@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientPanel.h" />
+    <ClInclude Include="CommandeExistantePanel.h" />
     <ClInclude Include="CommandePanel.h" />
     <ClInclude Include="MainPanel.h" />
     <ClInclude Include="MyForm.h">

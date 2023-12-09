@@ -18,6 +18,7 @@ namespace Corbeille5 {
         event EventHandler^ StockClicked;
         event EventHandler^ CommandClicked;
         event EventHandler^ ClientClicked;
+     
         // Déclarez d'autres événements pour les différents boutons.
 
         MainPanel() {
@@ -87,6 +88,7 @@ namespace Corbeille5 {
         }
         void OnCommandClicked(Object^ sender, EventArgs^ e) {
             CommandClicked(sender, e);
+            
         }
         void OnClientClicked(Object^ sender, EventArgs^ e) {
             ClientClicked(sender, e);
