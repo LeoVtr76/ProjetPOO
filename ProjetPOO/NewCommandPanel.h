@@ -48,7 +48,6 @@ namespace Corbeille5 {
         // Right side controls
         Label^ labelClient;
         ComboBox^ comboBoxClient;
-        Label^ labelIsSameAddress;
         CheckBox^ checkBoxIsSameAddress;
         Label^ labelCountry;
         ComboBox^ comboBoxCountry;
@@ -81,6 +80,7 @@ namespace Corbeille5 {
             this->textBoxMontantHT = CreateTextBox();
             this->labelMontantTVA = CreateLabel(L"Montant TVA");
             this->textBoxMontantTVA = CreateTextBox();
+            this->labelArticles = CreateLabel(L"Articles");
             this->comboBoxArticles = CreateComboBox();
 
             // Right side controls initialization
@@ -88,8 +88,7 @@ namespace Corbeille5 {
             this->comboBoxClient = CreateComboBox();
             this->comboBoxClient->DropDownStyle = ComboBoxStyle::DropDownList;
             //Faire le bail de la checkbox
-            this->labelIsSameAddress = CreateLabel(L"Adrese différente de celle du client");
-            this->checkBoxIsSameAddress = CreateCheckBox(L"blabla");
+            this->checkBoxIsSameAddress = CreateCheckBox(L"Adresse différente de celle du client");
             this->labelCountry = CreateLabel(L"Pays");
             this->comboBoxCountry = CreateComboBox();
             this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewCommandPanel::CountrySelectionChanged);
@@ -229,7 +228,6 @@ namespace Corbeille5 {
             // Right side controls
             this->Controls->Add(labelClient);
             this->Controls->Add(comboBoxClient);
-            this->Controls->Add(labelIsSameAddress);
             this->Controls->Add(checkBoxIsSameAddress);
             this->Controls->Add(labelCountry);
             this->Controls->Add(comboBoxCountry);
@@ -266,27 +264,27 @@ namespace Corbeille5 {
             textBoxRef->Location = Point(margin, labelRef->Bottom + margin);
             textBoxRef->Width = leftColumnWidth;
 
-            labelPaiementDate->Location = Point(margin, textBoxPaiementDate->Bottom + margin);
+            labelPaiementDate->Location = Point(margin, textBoxRef->Bottom + margin);
             textBoxPaiementDate->Location = Point(margin, labelPaiementDate->Bottom + margin);
             textBoxPaiementDate->Width = leftColumnWidth;
 
-            labelReglementDate->Location = Point(margin, textBoxReglementDate->Bottom + margin);
+            labelReglementDate->Location = Point(margin, textBoxPaiementDate->Bottom + margin);
             textBoxReglementDate->Location = Point(margin, labelReglementDate->Bottom + margin);
             textBoxReglementDate->Width = leftColumnWidth;
 
-            labelDeliveryDate->Location = Point(margin, textBoxDeliveryDate->Bottom + margin);
+            labelDeliveryDate->Location = Point(margin, textBoxReglementDate->Bottom + margin);
             textBoxDeliveryDate->Location = Point(margin, labelDeliveryDate->Bottom + margin);
             textBoxDeliveryDate->Width = leftColumnWidth;
 
-            labelMontantHT->Location = Point(margin, textBoxMontantHT->Bottom + margin);
+            labelMontantHT->Location = Point(margin, textBoxDeliveryDate->Bottom + margin);
             textBoxMontantHT->Location = Point(margin, labelMontantHT->Bottom + margin);
             textBoxMontantHT->Width = leftColumnWidth;
 
-            labelMontantTVA->Location = Point(margin, textBoxMontantTVA->Bottom + margin);
+            labelMontantTVA->Location = Point(margin, textBoxMontantHT->Bottom + margin);
             textBoxMontantTVA->Location = Point(margin, labelMontantTVA->Bottom + margin);
             textBoxMontantTVA->Width = leftColumnWidth;
 
-            labelArticles->Location = Point(margin, comboBoxArticles->Bottom + margin);
+            labelArticles->Location = Point(margin, textBoxMontantTVA->Bottom + margin);
             comboBoxArticles->Location = Point(margin, labelArticles->Bottom + margin);
             comboBoxArticles->Width = leftColumnWidth;
 
@@ -295,8 +293,7 @@ namespace Corbeille5 {
             comboBoxClient->Location = Point(this->Width / 2 + margin, labelClient->Bottom + margin);
             comboBoxClient->Width = rightColumnWidth;
 
-            labelIsSameAddress->Location = Point(this->Width / 2 + margin, comboBoxClient->Bottom + margin);
-            checkBoxIsSameAddress->Location = Point(this->Width / 2 + margin, labelIsSameAddress->Bottom + margin);
+            checkBoxIsSameAddress->Location = Point(this->Width / 2 + margin, comboBoxClient->Bottom + margin);
             checkBoxIsSameAddress->Width = rightColumnWidth;
 
             labelCountry->Location = Point(this->Width / 2 + margin, checkBoxIsSameAddress->Bottom + margin);
