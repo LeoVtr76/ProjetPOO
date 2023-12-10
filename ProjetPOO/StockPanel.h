@@ -11,6 +11,8 @@ namespace Corbeille5 {
     public:
         event EventHandler^ BackButtonClicked;
         event EventHandler^ NewArticleButtonClicked;
+        event EventHandler^ ExistingArticleButtonClicked;
+
         StockPanel() {
             InitializeComponent();
             this->Resize += gcnew EventHandler(this, &StockPanel::OnResize);
@@ -41,8 +43,8 @@ namespace Corbeille5 {
             Title->Text = L"Gestion du stock";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(20, 20); // Positionnement du titre
-            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
+            Title->Location = Point(-20, 20); // Positionnement du titre
+            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
             // Création et configuration du bouton de retour
             BackButton = (gcnew Button());
@@ -61,6 +63,7 @@ namespace Corbeille5 {
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Stock existant";
             ExistButton->Size = Drawing::Size(150, 50);
+            ExistButton->Click += gcnew EventHandler(this, &StockPanel::OnExistingArticleButtonClicked);
 
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
@@ -94,6 +97,10 @@ namespace Corbeille5 {
         }
         void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
             NewArticleButtonClicked(sender, e);
+        }
+
+        void OnExistingArticleButtonClicked(Object^ sender, EventArgs^ e) {
+            ExistingArticleButtonClicked(sender, e);
         }
     };
 }

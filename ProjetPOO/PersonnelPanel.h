@@ -9,6 +9,7 @@ namespace Corbeille5 {
     public ref class PersonnelPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ ExistingStaffButtonClicked;
 
         PersonnelPanel() {
             InitializeComponent();
@@ -40,8 +41,8 @@ namespace Corbeille5 {
             Title->Text = L"Gestion du personnel";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(20, 20); // Positionnement du titre
-            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
+            Title->Location = Point(-20, 20); // Positionnement du titre
+            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
             // Création et configuration du bouton de retour
             BackButton = (gcnew Button());
@@ -59,6 +60,7 @@ namespace Corbeille5 {
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Personnel existant";
             ExistButton->Size = Drawing::Size(150, 50);
+            ExistButton->Click += gcnew EventHandler(this, &PersonnelPanel::OnExistingStaffButtonClicked);
 
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
@@ -89,6 +91,10 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+
+        void OnExistingStaffButtonClicked(Object^ sender, EventArgs^ e) {
+            ExistingStaffButtonClicked(sender, e);
         }
     };
 }

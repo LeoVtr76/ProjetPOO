@@ -12,6 +12,8 @@ namespace Corbeille5 {
     public ref class ClientPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ ExistingClientButtonClicked;
+
         ClientPanel() {
             InitializeComponent();
             this->Resize += gcnew EventHandler(this, &ClientPanel::OnResize);
@@ -41,8 +43,8 @@ namespace Corbeille5 {
             Title->Text = L"Gestion des clients";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(20, 20); // Positionnement du titre
-            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
+            Title->Location = Point(-20, 20); // Positionnement du titre
+            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
             // Création et configuration du bouton de retour
             BackButton = (gcnew Button());
@@ -60,6 +62,7 @@ namespace Corbeille5 {
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Client existant";
             ExistButton->Size = Drawing::Size(150, 50);
+            ExistButton->Click += gcnew EventHandler(this, &ClientPanel::OnExistingClientButtonClicked);
 
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
@@ -90,6 +93,10 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+
+        void OnExistingClientButtonClicked(Object^ sender, EventArgs^ e) {
+            ExistingClientButtonClicked(sender, e);
         }
     };
 }

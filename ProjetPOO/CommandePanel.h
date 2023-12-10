@@ -41,8 +41,8 @@ namespace Corbeille5 {
             Title->Text = L"Gestion des commandes";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(20, 20); // Positionnement du titre
-            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
+            Title->Location = Point(-20, 20); // Positionnement du titre
+            Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
             // Création et configuration du bouton de retour
             BackButton = (gcnew Button());

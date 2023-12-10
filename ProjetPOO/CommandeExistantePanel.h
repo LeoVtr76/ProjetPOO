@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DeleteConfirmForm.h"
+
 using namespace System;
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -11,6 +13,7 @@ namespace Corbeille5 {
 	public:
 		event EventHandler^ BackButtonClicked;
 		event EventHandler^ CheckBoxChecked;
+		event EventHandler^ DeleteButtonClicked;
 
 		CommandeExistantePanel() {
 			InitializeComponent();
@@ -88,6 +91,7 @@ namespace Corbeille5 {
 			DeleteButton->Size = Drawing::Size(150, 50);
 			DeleteButton->Location = Point(this->Width - DeleteButton->Width - 10, -20);
 			DeleteButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Right | AnchorStyles::Bottom);
+			DeleteButton->Click += gcnew EventHandler(this, &CommandeExistantePanel::OnDeleteButtonClicked);
 
 			ValidButton = (gcnew Button());
 			ValidButton->TabIndex = 12;
@@ -113,13 +117,12 @@ namespace Corbeille5 {
 			NextButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom);
 
 			RefBox = (gcnew TextBox());
-			RefBox->Text = L"BonjourLeMonde!";
 			RefBox->TabIndex = 5;
 			RefBox->Size = Drawing::Size(140, 60);
 			RefBox->Location = Point(this->Width - RefBox->Width + 220, 180);
 			RefBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
 			RefBox->ReadOnly = true;
-			RefBox->Enabled = false;
+		
 
 			ArtBox = (gcnew ComboBox());
 			ArtBox->TabIndex = 6;
@@ -191,8 +194,6 @@ namespace Corbeille5 {
 			DatePaiLab->Location = Point(this->Width - DatePaiLab->Width + 100, 340);
 			DatePaiLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
-
-
 			this->Controls->Add(Title);
 			this->Controls->Add(listBox1);
 			this->Controls->Add(BackButton);
@@ -242,10 +243,6 @@ namespace Corbeille5 {
 			DatePaiBox->Size = Drawing::Size(newWidth, textBoxHeight);
 		}
 
-			
-			
-		
-
 		void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
 			BackButtonClicked(this, e);
 		}
@@ -259,5 +256,11 @@ namespace Corbeille5 {
 			DateLivBox->ReadOnly = !isEnabled;
 			DatePaiBox->ReadOnly = !isEnabled;
 		}
+
+		void OnDeleteButtonClicked(Object^ sender, EventArgs^ e) {
+			DeleteConfirmForm^ confirmForm = gcnew DeleteConfirmForm();
+			confirmForm->ShowDialog();
+		}
+
 	};
 }
