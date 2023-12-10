@@ -292,8 +292,8 @@ namespace Corbeille5 {
             else {
                 dbManager->AddClient(firstName, lastName, birthDate, addressId);
                 messageForm->SetMessage("Le client à été ajouté avec succès !");
-                FillCountryComboBox();
                 ClearFields();
+                FillCountryComboBox();
             }
             messageForm->ShowDialog();
         }

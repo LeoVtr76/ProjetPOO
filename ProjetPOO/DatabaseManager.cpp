@@ -273,11 +273,10 @@ void DatabaseManager::AddClient(String^ firstName, String^ lastName, String^ bir
     }
 }
 
-List<String^>^ DatabaseManager::GetManagers() {
-    List<String^>^ managerList = gcnew List<String^>();
+Dictionary<String^, int>^ DatabaseManager::GetManagers() {
+    Dictionary<String^, int>^ persDict = gcnew Dictionary<String^, int>();
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    String^ commandText = "SELECT PERS_PRENOM, PERS_NOM FROM personnel";
-
+    String^ commandText = "SELECT ID_PERSONNEL, PERS_PRENOM, PERS_NOM FROM personnel";
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
     SqlDataAdapter^ da = gcnew SqlDataAdapter(command);
     DataTable^ dt = gcnew DataTable();
@@ -287,8 +286,9 @@ List<String^>^ DatabaseManager::GetManagers() {
         da->Fill(dt);
 
         for each (DataRow ^ row in dt->Rows) {
-            String^ fullName = row["PERS_PRENOM"]->ToString() + " " + row["PERS_NOM"]->ToString();
-            managerList->Add(fullName);
+            String^ fullName = row["PRES_PRENOM"]->ToString() + " " + row["PRES_NOM"]->ToString();
+            int persId = Convert::ToInt32(row["ID_PERSONNEL"]);
+            persDict->Add(fullName, persId);
         }
     }
     catch (Exception^ e) {
@@ -298,13 +298,12 @@ List<String^>^ DatabaseManager::GetManagers() {
         if (connection->State == ConnectionState::Open)
             connection->Close();
     }
-    return managerList;
+    return persDict;
 }
-List<String^>^ DatabaseManager::GetClients() {
-    List<String^>^ clientList = gcnew List<String^>();
+Dictionary<String^, int>^ DatabaseManager::GetClients() {
+    Dictionary<String^, int>^ clientDict = gcnew Dictionary<String^, int>();
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    String^ commandText = "SELECT CLI_PRENOM, CLI_NOM FROM client";
-
+    String^ commandText = "SELECT ID_CLIENT, CLI_PRENOM, CLI_NOM FROM client";
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
     SqlDataAdapter^ da = gcnew SqlDataAdapter(command);
     DataTable^ dt = gcnew DataTable();
@@ -315,7 +314,8 @@ List<String^>^ DatabaseManager::GetClients() {
 
         for each (DataRow ^ row in dt->Rows) {
             String^ fullName = row["CLI_PRENOM"]->ToString() + " " + row["CLI_NOM"]->ToString();
-            clientList->Add(fullName);
+            int clientId = Convert::ToInt32(row["ID_CLIENT"]);
+            clientDict->Add(fullName, clientId);
         }
     }
     catch (Exception^ e) {
@@ -325,14 +325,14 @@ List<String^>^ DatabaseManager::GetClients() {
         if (connection->State == ConnectionState::Open)
             connection->Close();
     }
-    return clientList;
+    return clientDict;
 }
-int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
+int DatabaseManager::GetClientAddressById(int clientId) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    String^ commandText = "SELECT ID_PERSONNEL FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName";
+    String^ commandText = "SELECT ID_ADRESSE FROM client WHERE ID_CLIENT = @clientId";
+
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
-    command->Parameters->AddWithValue("@firstName", firstName);
-    command->Parameters->AddWithValue("@lastName", lastName);
+    command->Parameters->AddWithValue("@clientId", clientId);
 
     try {
         connection->Open();
@@ -341,18 +341,70 @@ int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
             return Convert::ToInt32(result);
         }
         else {
-            return -1;
+            return -1; // Ou une autre valeur indiquant qu'aucune adresse n'a été trouvée
         }
     }
     catch (Exception^ e) {
         Console::WriteLine("Erreur : " + e->Message);
-        return -1;
+        return -1; // Ou une autre valeur indiquant une erreur
     }
     finally {
         if (connection->State == ConnectionState::Open)
             connection->Close();
     }
 }
+bool DatabaseManager::CommandExist(String^ ref) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT COUNT(*) FROM commande WHERE COM_REF = @ref";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@ref", ref);
+
+    try {
+        connection->Open();
+        int count = Convert::ToInt32(command->ExecuteScalar());
+        return count > 0;
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return false;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
+void DatabaseManager::AddCommand(String^ ref, String^ datePaie, String^ dateReg, String^ dateLiv, String^ amountHT, String^ amountTVA, int clientId, int addressId) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+
+    String^ commandText = "INSERT INTO commande (COM_REF, COM_DATE_PAIEM, COM_DATE_REGL, COM_DATE_LIV, COM_MONT_TOT_HT, COM_MONT_TOT_TVA, ID_CLIENT, ID_ADRESSE) "
+        "VALUES (@ref, @datePaie, @dateReg, @dateLiv, @amountHT, @amountTVA, @clientId, @addressId)";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+
+    command->Parameters->AddWithValue("@ref", ref);
+    command->Parameters->AddWithValue("@datePaie", DateTime::Parse(datePaie));
+    command->Parameters->AddWithValue("@dateReg", DateTime::Parse(dateReg));
+    command->Parameters->AddWithValue("@dateLiv", DateTime::Parse(dateLiv));
+    command->Parameters->AddWithValue("@amountHT", Decimal::Parse(amountHT));
+    command->Parameters->AddWithValue("@amountTVA", Decimal::Parse(amountTVA));
+    command->Parameters->AddWithValue("@clientId", clientId);
+    command->Parameters->AddWithValue("@addressId", addressId);
+
+    try {
+        connection->Open();
+        command->ExecuteNonQuery();
+        Console::WriteLine("Commande ajoutée avec succès !");
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur lors de l'ajout de la commande : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
+
 bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, String^ hireDate) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
     String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName AND PERS_DATE_EMB = @hireDate";

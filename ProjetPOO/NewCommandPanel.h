@@ -87,8 +87,8 @@ namespace Corbeille5 {
             this->labelClient = CreateLabel(L"Client");
             this->comboBoxClient = CreateComboBox();
             this->comboBoxClient->DropDownStyle = ComboBoxStyle::DropDownList;
-            //Faire le bail de la checkbox
             this->checkBoxIsSameAddress = CreateCheckBox(L"Adresse différente de celle du client");
+            this->checkBoxIsSameAddress->CheckedChanged += gcnew System::EventHandler(this, &NewCommandPanel::OnCheckBoxChanged);
             this->labelCountry = CreateLabel(L"Pays");
             this->comboBoxCountry = CreateComboBox();
             this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewCommandPanel::CountrySelectionChanged);
@@ -99,6 +99,14 @@ namespace Corbeille5 {
             this->comboBoxCity = CreateComboBox();
             this->labelAddress = CreateLabel(L"Adresse");
             this->textBoxAddress = CreateTextBox();
+            this->labelCountry->Visible = false;
+            this->comboBoxCountry->Visible = false;
+            this->labelPostalCode->Visible = false;
+            this->comboBoxPostalCode->Visible = false;
+            this->labelCity->Visible = false;
+            this->comboBoxCity->Visible = false;
+            this->labelAddress->Visible = false;
+            this->textBoxAddress->Visible = false;
 
             // Bottom controls initialization
             this->buttonBack = CreateButton(L"Retour");
@@ -124,13 +132,15 @@ namespace Corbeille5 {
         }
         void FillClientComboBox() {
             DatabaseManager^ dbManager = gcnew DatabaseManager();
-            List<String^>^ clientList = dbManager->GetClients();
+            Dictionary<String^, int>^ clientDict = dbManager->GetClients();
 
             this->comboBoxClient->Items->Clear();
-            for each (String ^ fullName in clientList) {
-                this->comboBoxClient->Items->Add(fullName);
+            for each (KeyValuePair<String^, int> client in clientDict) {
+                this->comboBoxClient->Items->Add(client.Key);
             }
+            this->comboBoxClient->Tag = clientDict;
         }
+
         void FillCpComboBox() {
             String^ selectedCountry = this->comboBoxCountry->Text;
             DatabaseManager^ dbManager = gcnew DatabaseManager();
@@ -336,61 +346,84 @@ namespace Corbeille5 {
             FillCityComboBox();
         }
         // Event handlers
+        void OnCheckBoxChanged(Object^ sender, EventArgs^ e) {
+            bool isAddressDifferent = this->checkBoxIsSameAddress->Checked;
+
+            // Activer ou désactiver les contrôles d'adresse
+            this->labelCountry->Visible = isAddressDifferent;
+            this->comboBoxCountry->Visible = isAddressDifferent;
+            this->labelPostalCode->Visible = isAddressDifferent;
+            this->comboBoxPostalCode->Visible = isAddressDifferent;
+            this->labelCity->Visible = isAddressDifferent;
+            this->comboBoxCity->Visible = isAddressDifferent;
+            this->labelAddress->Visible = isAddressDifferent;
+            this->textBoxAddress->Visible = isAddressDifferent;
+
+            if (!isAddressDifferent) {
+                this->comboBoxCountry->SelectedIndex = -1;
+                this->comboBoxPostalCode->SelectedIndex = -1;
+                this->comboBoxCity->SelectedIndex = -1;
+                this->textBoxAddress->Clear();
+            }
+        }
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(sender, e);
         }
         void OnValidateButtonClicked(Object^ sender, EventArgs^ e) {
-            //DatabaseManager^ dbManager = gcnew DatabaseManager();
+            DatabaseManager^ dbManager = gcnew DatabaseManager();
+            int clientId;
+            String^ selectedClientName = (String^)comboBoxClient->SelectedItem;
+            Dictionary<String^, int>^ clientDict = (Dictionary<String^, int>^)comboBoxClient->Tag;
 
-            //// Vérification des valeurs des ComboBox
-            //String^ country = comboBoxCountry->Text;
-            //String^ postalCode = comboBoxPostalCode->Text;
-            //String^ city = comboBoxCity->Text;
+            if (clientDict->ContainsKey(selectedClientName)) {
+                clientId = clientDict[selectedClientName];
+            }
 
-            //// Ajouter le pays s'il n'existe pas
-            //if (!dbManager->CheckCountry(country)) {
-            //    dbManager->AddCountry(country);
-            //}
+            // Vérification des valeurs des ComboBox
+            String^ country = comboBoxCountry->Text;
+            String^ postalCode = comboBoxPostalCode->Text;
+            String^ city = comboBoxCity->Text;
+            int addressId;
+            if (this->checkBoxIsSameAddress->Checked) {
+                // Ajouter le pays s'il n'existe pas
+                if (!dbManager->CheckCountry(country)) {
+                    dbManager->AddCountry(country);
+                }
 
-            //// Ajouter la ville et son code postal s'ils n'existent pas
-            //if (!dbManager->CheckCity(country, city)) {
-            //    dbManager->AddCity(city, postalCode, country);
-            //}
+                // Ajouter la ville et son code postal s'ils n'existent pas
+                if (!dbManager->CheckCity(country, city)) {
+                    dbManager->AddCity(city, postalCode, country);
+                }
 
-            //// Traitement et création de l'adresse
-            //String^ address = textBoxAddress->Text;
-            //array<String^>^ addressParts = address->Split(' ');
-            //String^ streetNumber = addressParts[0];
-            //String^ streetName = String::Join(" ", addressParts, 1, addressParts->Length - 1);
-            //int addressId = dbManager->AddAddress(streetNumber, streetName, city);
-
-            //// Création du personnel
-            //String^ firstName = textBoxFirstName->Text;
-            //String^ lastName = textBoxLastName->Text;
-            //String^ hierarchyLevel = textBoxHierarchyLevel->Text;
-            //String^ hireDate = textBoxHireDate->Text;
-            //int managerId = -1;
-            //String^ managerFullName = comboBoxManager->Text;
-            //if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
-            //    array<String^>^ nameParts = managerFullName->Split(' ');
-            //    if (nameParts->Length >= 2) {
-            //        String^ managerFirstName = nameParts[0];
-            //        String^ managerLastName = nameParts[1];
-            //        managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
-            //    }
-            //}
-            //InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
-            //if (dbManager->PersonnelExists(firstName, lastName, hireDate)) {
-            //    messageForm->SetMessage("Le personnel existe déjà.");
-            //}
-            //else {
-            //    dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
-            //    messageForm->SetMessage("Le personnel à été ajouté avec succès !");
-            //    FillCountryComboBox();
-            //    FillManagerComboBox();
-            //    ClearFields();
-            //}
-            //messageForm->ShowDialog();
+                // Traitement et création de l'adresse
+                String^ address = textBoxAddress->Text;
+                array<String^>^ addressParts = address->Split(' ');
+                String^ streetNumber = addressParts[0];
+                String^ streetName = String::Join(" ", addressParts, 1, addressParts->Length - 1);
+                addressId = dbManager->AddAddress(streetNumber, streetName, city);
+            }
+            else {
+                addressId = dbManager->GetClientAddressById(clientId);
+            }
+            String^ ref = textBoxRef->Text;
+            String^ datePaie = textBoxPaiementDate->Text;
+            String^ dateReg = textBoxReglementDate->Text;
+            String^ dateLiv = textBoxDeliveryDate->Text;
+            String^ amountHT = textBoxMontantHT->Text;
+            String^ amountTVA = textBoxMontantTVA->Text;
+            
+            InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
+            if (dbManager->CommandExist(ref)) {
+                messageForm->SetMessage("La commande existe déjà.");
+            }
+            else {
+                dbManager->AddCommand(ref, datePaie, dateReg, dateLiv, amountHT, amountTVA, clientId, addressId);
+                messageForm->SetMessage("La commande à été ajouté avec succès !");
+                ClearFields();
+                FillCountryComboBox();
+                FillClientComboBox();
+            }
+            messageForm->ShowDialog();
         }
     };
 }
