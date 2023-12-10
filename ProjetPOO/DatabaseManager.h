@@ -21,6 +21,7 @@ public:
     void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId);
     void AddClient(String^ firstName, String^ lastName, String^ birthDate, int addressId);
     List<String^>^ GetManagers();
+    List<String^>^ GetClients();
     int GetPersonnelId(String^ firstName, String^ lastName);
     bool PersonnelExists(String^ firstName, String^ lastName, String^ hireDate);
     bool ClientExists(String^ firstName, String^ lastName, String^ birthDate);

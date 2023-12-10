@@ -300,6 +300,33 @@ List<String^>^ DatabaseManager::GetManagers() {
     }
     return managerList;
 }
+List<String^>^ DatabaseManager::GetClients() {
+    List<String^>^ clientList = gcnew List<String^>();
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT CLI_PRENOM, CLI_NOM FROM client";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    SqlDataAdapter^ da = gcnew SqlDataAdapter(command);
+    DataTable^ dt = gcnew DataTable();
+
+    try {
+        connection->Open();
+        da->Fill(dt);
+
+        for each (DataRow ^ row in dt->Rows) {
+            String^ fullName = row["CLI_PRENOM"]->ToString() + " " + row["CLI_NOM"]->ToString();
+            clientList->Add(fullName);
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+    return clientList;
+}
 int DatabaseManager::GetPersonnelId(String^ firstName, String^ lastName) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
     String^ commandText = "SELECT ID_PERSONNEL FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName";

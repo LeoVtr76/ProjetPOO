@@ -15,7 +15,7 @@ namespace Corbeille5 {
         NewCommandPanel() {
             InitializeComponent();
             FillCountryComboBox();
-            //FillManagerComboBox();
+            FillClientComboBox();
             this->Resize += gcnew EventHandler(this, &NewCommandPanel::OnResize);
         }
 
@@ -123,13 +123,13 @@ namespace Corbeille5 {
             }
         }
         void FillClientComboBox() {
-            /*DatabaseManager^ dbManager = gcnew DatabaseManager();
-            List<String^>^ managerList = dbManager->GetManagers();
+            DatabaseManager^ dbManager = gcnew DatabaseManager();
+            List<String^>^ clientList = dbManager->GetClients();
 
-            this->comboBoxManager->Items->Clear();
-            for each (String ^ fullName in managerList) {
-                this->comboBoxManager->Items->Add(fullName);
-            }*/
+            this->comboBoxClient->Items->Clear();
+            for each (String ^ fullName in clientList) {
+                this->comboBoxClient->Items->Add(fullName);
+            }
         }
         void FillCpComboBox() {
             String^ selectedCountry = this->comboBoxCountry->Text;
