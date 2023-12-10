@@ -129,6 +129,7 @@ namespace Corbeille5 {
 			ArtBox->Size = Drawing::Size(140, 60);
 			ArtBox->Location = Point(this->Width - ArtBox->Width + 220, 270);
 			ArtBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Left | AnchorStyles::Top);
+			ArtBox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 			MontBox = (gcnew TextBox());
 			MontBox->TabIndex = 7;
@@ -255,6 +256,12 @@ namespace Corbeille5 {
 			AdrLivBox->ReadOnly = !isEnabled;
 			DateLivBox->ReadOnly = !isEnabled;
 			DatePaiBox->ReadOnly = !isEnabled;
+			if (isEnabled) {
+				ArtBox->DropDownStyle = ComboBoxStyle::DropDown;
+			}
+			else {
+				ArtBox->DropDownStyle = ComboBoxStyle::DropDownList;
+			}
 		}
 
 		void OnDeleteButtonClicked(Object^ sender, EventArgs^ e) {
