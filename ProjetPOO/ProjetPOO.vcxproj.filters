@@ -35,9 +35,6 @@
     <ClInclude Include="PersonnelPanel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="MyForm1.h">
-      <Filter>Fichiers sources</Filter>
-    </ClInclude>
     <ClInclude Include="StockPanel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -89,9 +86,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="MyForm.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="MyForm1.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="DatabaseManager.cpp">
