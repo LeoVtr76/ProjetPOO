@@ -15,7 +15,7 @@ namespace Corbeille5 {
         NewCommandPanel() {
             InitializeComponent();
             FillCountryComboBox();
-            FillManagerComboBox();
+            //FillManagerComboBox();
             this->Resize += gcnew EventHandler(this, &NewCommandPanel::OnResize);
         }
 
@@ -30,18 +30,26 @@ namespace Corbeille5 {
         System::ComponentModel::Container^ components;
 
         // Left side controls
-        Label^ labelFirstName;
-        TextBox^ textBoxFirstName;
-        Label^ labelLastName;
-        TextBox^ textBoxLastName;
-        Label^ labelHireDate;
-        TextBox^ textBoxHireDate;
-        Label^ labelHierarchyLevel;
-        TextBox^ textBoxHierarchyLevel;
+        Label^ labelRef;
+        TextBox^ textBoxRef;
+        Label^ labelPaiementDate;
+        TextBox^ textBoxPaiementDate;
+        Label^ labelReglementDate;
+        TextBox^ textBoxReglementDate;
+        Label^ labelDeliveryDate;
+        TextBox^ textBoxDeliveryDate;
+        Label^ labelMontantHT;
+        TextBox^ textBoxMontantHT;
+        Label^ labelMontantTVA;
+        TextBox^ textBoxMontantTVA;
+        Label^ labelArticles;
+        ComboBox^ comboBoxArticles;
 
         // Right side controls
-        Label^ labelManager;
-        ComboBox^ comboBoxManager;
+        Label^ labelClient;
+        ComboBox^ comboBoxClient;
+        Label^ labelIsSameAddress;
+        CheckBox^ checkBoxIsSameAddress;
         Label^ labelCountry;
         ComboBox^ comboBoxCountry;
         Label^ labelPostalCode;
@@ -61,19 +69,27 @@ namespace Corbeille5 {
             this->Dock = DockStyle::Fill;
 
             // Left side controls initialization
-            this->labelFirstName = CreateLabel(L"Prénom");
-            this->textBoxFirstName = CreateTextBox();
-            this->labelLastName = CreateLabel(L"Nom");
-            this->textBoxLastName = CreateTextBox();
-            this->labelHireDate = CreateLabel(L"Date d'Embauche");
-            this->textBoxHireDate = CreateTextBox();
-            this->labelHierarchyLevel = CreateLabel(L"Niveau Hiérarchique");
-            this->textBoxHierarchyLevel = CreateTextBox();
+            this->labelRef = CreateLabel(L"Réference");
+            this->textBoxRef = CreateTextBox();
+            this->labelPaiementDate = CreateLabel(L"Date de paiement");
+            this->textBoxPaiementDate = CreateTextBox();
+            this->labelReglementDate = CreateLabel(L"Date de règlement");
+            this->textBoxReglementDate = CreateTextBox();
+            this->labelDeliveryDate = CreateLabel(L"date de livraison");
+            this->textBoxDeliveryDate = CreateTextBox();
+            this->labelMontantHT = CreateLabel(L"Montant HT");
+            this->textBoxMontantHT = CreateTextBox();
+            this->labelMontantTVA = CreateLabel(L"Montant TVA");
+            this->textBoxMontantTVA = CreateTextBox();
+            this->comboBoxArticles = CreateComboBox();
 
             // Right side controls initialization
-            this->labelManager = CreateLabel(L"Responsable");
-            this->comboBoxManager = CreateComboBox();
-            this->comboBoxManager->DropDownStyle = ComboBoxStyle::DropDownList;
+            this->labelClient = CreateLabel(L"Client");
+            this->comboBoxClient = CreateComboBox();
+            this->comboBoxClient->DropDownStyle = ComboBoxStyle::DropDownList;
+            //Faire le bail de la checkbox
+            this->labelIsSameAddress = CreateLabel(L"Adrese différente de celle du client");
+            this->checkBoxIsSameAddress = CreateCheckBox(L"blabla");
             this->labelCountry = CreateLabel(L"Pays");
             this->comboBoxCountry = CreateComboBox();
             this->comboBoxCountry->SelectedIndexChanged += gcnew EventHandler(this, &NewCommandPanel::CountrySelectionChanged);
@@ -107,14 +123,14 @@ namespace Corbeille5 {
                 this->comboBoxCountry->Items->Add(countryName);
             }
         }
-        void FillManagerComboBox() {
-            DatabaseManager^ dbManager = gcnew DatabaseManager();
+        void FillClientComboBox() {
+            /*DatabaseManager^ dbManager = gcnew DatabaseManager();
             List<String^>^ managerList = dbManager->GetManagers();
 
             this->comboBoxManager->Items->Clear();
             for each (String ^ fullName in managerList) {
                 this->comboBoxManager->Items->Add(fullName);
-            }
+            }*/
         }
         void FillCpComboBox() {
             String^ selectedCountry = this->comboBoxCountry->Text;
@@ -144,6 +160,15 @@ namespace Corbeille5 {
             label->Font = gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10);
             return label;
         }
+        CheckBox^ CreateCheckBox(String^ text) {
+            CheckBox^ checkBox = gcnew CheckBox();
+            checkBox->AutoSize = true;
+            checkBox->TabIndex = 0;
+            checkBox->Text = text;
+            checkBox->UseVisualStyleBackColor = true;
+            return checkBox;
+
+        }
 
         TextBox^ CreateTextBox() {
             TextBox^ textBox = gcnew TextBox();
@@ -168,30 +193,44 @@ namespace Corbeille5 {
         }
         void ClearFields() {
             // Clear all TextBoxes, reset ComboBoxes, etc.
-            this->textBoxFirstName->Clear();
-            this->textBoxLastName->Clear();
+            this->textBoxRef->Clear();
+            this->textBoxPaiementDate->Clear();
+            this->textBoxReglementDate->Clear();
+            this->textBoxDeliveryDate->Clear();
+            this->textBoxMontantHT->Clear();
+            this->textBoxMontantTVA->Clear();
+            this->comboBoxArticles->SelectedIndex = -1;
+
+            this->comboBoxClient->SelectedIndex = -1;
+            //this->checkBoxIsSameAddress->
             this->comboBoxCountry->SelectedIndex = -1;
             this->comboBoxPostalCode->SelectedIndex = -1;
             this->comboBoxCity->SelectedIndex = -1;
             this->textBoxAddress->Clear();
-            this->textBoxHierarchyLevel->Clear();
-            this->textBoxHireDate->Clear();
         }
         // Adding controls to UserControl
         void AddControlsToPanel() {
             // Left side controls
-            this->Controls->Add(labelFirstName);
-            this->Controls->Add(textBoxFirstName);
-            this->Controls->Add(labelLastName);
-            this->Controls->Add(textBoxLastName);
-            this->Controls->Add(labelHireDate);
-            this->Controls->Add(textBoxHireDate);
-            this->Controls->Add(labelHierarchyLevel);
-            this->Controls->Add(textBoxHierarchyLevel);
+            this->Controls->Add(labelRef);
+            this->Controls->Add(textBoxRef);
+            this->Controls->Add(labelPaiementDate);
+            this->Controls->Add(textBoxPaiementDate);
+            this->Controls->Add(labelReglementDate);
+            this->Controls->Add(textBoxReglementDate);
+            this->Controls->Add(labelDeliveryDate);
+            this->Controls->Add(textBoxDeliveryDate);
+            this->Controls->Add(labelMontantHT);
+            this->Controls->Add(textBoxMontantHT);
+            this->Controls->Add(labelMontantTVA);
+            this->Controls->Add(textBoxMontantTVA);
+            this->Controls->Add(labelArticles);
+            this->Controls->Add(comboBoxArticles);
 
             // Right side controls
-            this->Controls->Add(labelManager);
-            this->Controls->Add(comboBoxManager);
+            this->Controls->Add(labelClient);
+            this->Controls->Add(comboBoxClient);
+            this->Controls->Add(labelIsSameAddress);
+            this->Controls->Add(checkBoxIsSameAddress);
             this->Controls->Add(labelCountry);
             this->Controls->Add(comboBoxCountry);
             this->Controls->Add(labelPostalCode);
@@ -223,28 +262,44 @@ namespace Corbeille5 {
             int rightColumnWidth = this->Width / 2 - 2 * margin;
 
             // Position left column controls
-            labelFirstName->Location = Point(margin, margin);
-            textBoxFirstName->Location = Point(margin, labelFirstName->Bottom + margin);
-            textBoxFirstName->Width = leftColumnWidth;
+            labelRef->Location = Point(margin, margin);
+            textBoxRef->Location = Point(margin, labelRef->Bottom + margin);
+            textBoxRef->Width = leftColumnWidth;
 
-            labelLastName->Location = Point(margin, textBoxFirstName->Bottom + margin);
-            textBoxLastName->Location = Point(margin, labelLastName->Bottom + margin);
-            textBoxLastName->Width = leftColumnWidth;
+            labelPaiementDate->Location = Point(margin, textBoxPaiementDate->Bottom + margin);
+            textBoxPaiementDate->Location = Point(margin, labelPaiementDate->Bottom + margin);
+            textBoxPaiementDate->Width = leftColumnWidth;
 
-            labelHireDate->Location = Point(margin, textBoxLastName->Bottom + margin);
-            textBoxHireDate->Location = Point(margin, labelHireDate->Bottom + margin);
-            textBoxHireDate->Width = leftColumnWidth;
+            labelReglementDate->Location = Point(margin, textBoxReglementDate->Bottom + margin);
+            textBoxReglementDate->Location = Point(margin, labelReglementDate->Bottom + margin);
+            textBoxReglementDate->Width = leftColumnWidth;
 
-            labelHierarchyLevel->Location = Point(margin, textBoxHireDate->Bottom + margin);
-            textBoxHierarchyLevel->Location = Point(margin, labelHierarchyLevel->Bottom + margin);
-            textBoxHierarchyLevel->Width = leftColumnWidth;
+            labelDeliveryDate->Location = Point(margin, textBoxDeliveryDate->Bottom + margin);
+            textBoxDeliveryDate->Location = Point(margin, labelDeliveryDate->Bottom + margin);
+            textBoxDeliveryDate->Width = leftColumnWidth;
+
+            labelMontantHT->Location = Point(margin, textBoxMontantHT->Bottom + margin);
+            textBoxMontantHT->Location = Point(margin, labelMontantHT->Bottom + margin);
+            textBoxMontantHT->Width = leftColumnWidth;
+
+            labelMontantTVA->Location = Point(margin, textBoxMontantTVA->Bottom + margin);
+            textBoxMontantTVA->Location = Point(margin, labelMontantTVA->Bottom + margin);
+            textBoxMontantTVA->Width = leftColumnWidth;
+
+            labelArticles->Location = Point(margin, comboBoxArticles->Bottom + margin);
+            comboBoxArticles->Location = Point(margin, labelArticles->Bottom + margin);
+            comboBoxArticles->Width = leftColumnWidth;
 
             // Position right column controls
-            labelManager->Location = Point(this->Width / 2 + margin, margin);
-            comboBoxManager->Location = Point(this->Width / 2 + margin, labelManager->Bottom + margin);
-            comboBoxManager->Width = rightColumnWidth;
+            labelClient->Location = Point(this->Width / 2 + margin, margin);
+            comboBoxClient->Location = Point(this->Width / 2 + margin, labelClient->Bottom + margin);
+            comboBoxClient->Width = rightColumnWidth;
 
-            labelCountry->Location = Point(this->Width / 2 + margin, comboBoxManager->Bottom + margin);
+            labelIsSameAddress->Location = Point(this->Width / 2 + margin, comboBoxClient->Bottom + margin);
+            checkBoxIsSameAddress->Location = Point(this->Width / 2 + margin, labelIsSameAddress->Bottom + margin);
+            checkBoxIsSameAddress->Width = rightColumnWidth;
+
+            labelCountry->Location = Point(this->Width / 2 + margin, checkBoxIsSameAddress->Bottom + margin);
             comboBoxCountry->Location = Point(this->Width / 2 + margin, labelCountry->Bottom + margin);
             comboBoxCountry->Width = rightColumnWidth;
 
@@ -288,57 +343,57 @@ namespace Corbeille5 {
             BackButtonClicked(sender, e);
         }
         void OnValidateButtonClicked(Object^ sender, EventArgs^ e) {
-            DatabaseManager^ dbManager = gcnew DatabaseManager();
+            //DatabaseManager^ dbManager = gcnew DatabaseManager();
 
-            // Vérification des valeurs des ComboBox
-            String^ country = comboBoxCountry->Text;
-            String^ postalCode = comboBoxPostalCode->Text;
-            String^ city = comboBoxCity->Text;
+            //// Vérification des valeurs des ComboBox
+            //String^ country = comboBoxCountry->Text;
+            //String^ postalCode = comboBoxPostalCode->Text;
+            //String^ city = comboBoxCity->Text;
 
-            // Ajouter le pays s'il n'existe pas
-            if (!dbManager->CheckCountry(country)) {
-                dbManager->AddCountry(country);
-            }
+            //// Ajouter le pays s'il n'existe pas
+            //if (!dbManager->CheckCountry(country)) {
+            //    dbManager->AddCountry(country);
+            //}
 
-            // Ajouter la ville et son code postal s'ils n'existent pas
-            if (!dbManager->CheckCity(country, city)) {
-                dbManager->AddCity(city, postalCode, country);
-            }
+            //// Ajouter la ville et son code postal s'ils n'existent pas
+            //if (!dbManager->CheckCity(country, city)) {
+            //    dbManager->AddCity(city, postalCode, country);
+            //}
 
-            // Traitement et création de l'adresse
-            String^ address = textBoxAddress->Text;
-            array<String^>^ addressParts = address->Split(' ');
-            String^ streetNumber = addressParts[0];
-            String^ streetName = String::Join(" ", addressParts, 1, addressParts->Length - 1);
-            int addressId = dbManager->AddAddress(streetNumber, streetName, city);
+            //// Traitement et création de l'adresse
+            //String^ address = textBoxAddress->Text;
+            //array<String^>^ addressParts = address->Split(' ');
+            //String^ streetNumber = addressParts[0];
+            //String^ streetName = String::Join(" ", addressParts, 1, addressParts->Length - 1);
+            //int addressId = dbManager->AddAddress(streetNumber, streetName, city);
 
-            // Création du personnel
-            String^ firstName = textBoxFirstName->Text;
-            String^ lastName = textBoxLastName->Text;
-            String^ hierarchyLevel = textBoxHierarchyLevel->Text;
-            String^ hireDate = textBoxHireDate->Text;
-            int managerId = -1;
-            String^ managerFullName = comboBoxManager->Text;
-            if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
-                array<String^>^ nameParts = managerFullName->Split(' ');
-                if (nameParts->Length >= 2) {
-                    String^ managerFirstName = nameParts[0];
-                    String^ managerLastName = nameParts[1];
-                    managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
-                }
-            }
-            InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
-            if (dbManager->PersonnelExists(firstName, lastName, hireDate)) {
-                messageForm->SetMessage("Le personnel existe déjà.");
-            }
-            else {
-                dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
-                messageForm->SetMessage("Le personnel à été ajouté avec succès !");
-                FillCountryComboBox();
-                FillManagerComboBox();
-                ClearFields();
-            }
-            messageForm->ShowDialog();
+            //// Création du personnel
+            //String^ firstName = textBoxFirstName->Text;
+            //String^ lastName = textBoxLastName->Text;
+            //String^ hierarchyLevel = textBoxHierarchyLevel->Text;
+            //String^ hireDate = textBoxHireDate->Text;
+            //int managerId = -1;
+            //String^ managerFullName = comboBoxManager->Text;
+            //if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
+            //    array<String^>^ nameParts = managerFullName->Split(' ');
+            //    if (nameParts->Length >= 2) {
+            //        String^ managerFirstName = nameParts[0];
+            //        String^ managerLastName = nameParts[1];
+            //        managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
+            //    }
+            //}
+            //InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
+            //if (dbManager->PersonnelExists(firstName, lastName, hireDate)) {
+            //    messageForm->SetMessage("Le personnel existe déjà.");
+            //}
+            //else {
+            //    dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
+            //    messageForm->SetMessage("Le personnel à été ajouté avec succès !");
+            //    FillCountryComboBox();
+            //    FillManagerComboBox();
+            //    ClearFields();
+            //}
+            //messageForm->ShowDialog();
         }
     };
 }
