@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -26,9 +25,14 @@ namespace Corbeille5 {
         System::ComponentModel::Container^ components;
 
         Label^ Title;
-        Button^ NewButton;
-        Button^ ExistButton;
+        TextBox^ TextBoxArticleName;
+        Label^ LabelArticleName;
+        TextBox^ TextBoxArticleAmount;
+        Label^ LabelArticleAmount;
+        TextBox^ TextBoxArticlePrice;
+        Label^ LabelArticlePrice;
         Button^ BackButton;
+        Button^ ValidateButton;
 
         void InitializeComponent() {
             // Configuration du UserControl
@@ -51,44 +55,83 @@ namespace Corbeille5 {
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
             BackButton->Click += gcnew EventHandler(this, &NewArticlePanel::OnBackButtonClicked);
 
-            // Création et configuration des boutons NewButton et ExistButton
-            NewButton = (gcnew Button());
-            NewButton->Text = L"foo";
-            NewButton->Size = Drawing::Size(150, 50);
+            // Création des TextBox et des Label    
+            TextBoxArticleName = CreateTextBox();
+            LabelArticleName = CreateLabel(L"Nom de l'article");
+            TextBoxArticleAmount = CreateTextBox();
+            LabelArticleAmount = CreateLabel(L"Quantité de l'article");
+            TextBoxArticlePrice = CreateTextBox();
+            LabelArticlePrice = CreateLabel(L"Prix de l'article");
 
-            ExistButton = (gcnew Button());
-            ExistButton->Text = L"bar";
-            ExistButton->Size = Drawing::Size(150, 50);
-
+            ValidateButton = CreateButton(L"Valider");
+            ValidateButton->Click += gcnew System::EventHandler(this, &NewArticlePanel::OnValidateButtonClicked);
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
             this->Controls->Add(BackButton);
-            this->Controls->Add(NewButton);
-            this->Controls->Add(ExistButton);
+            this->Controls->Add(TextBoxArticleName);
+            this->Controls->Add(LabelArticleName);
+            this->Controls->Add(TextBoxArticleAmount);
+            this->Controls->Add(LabelArticleAmount);
+            this->Controls->Add(TextBoxArticlePrice);
+            this->Controls->Add(LabelArticlePrice);
+            this->Controls->Add(ValidateButton);
 
-            AdjustButtonSizeAndPosition();
+            AdjustControlPositions();
+        }
+
+        TextBox^ CreateTextBox() {
+            TextBox^ textBox = gcnew TextBox();
+            textBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right);
+            return textBox;
+        }
+        Button^ CreateButton(String^ text) {
+            Button^ button = gcnew Button();
+            button->Text = text;
+            button->AutoSize = true;
+            button->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Right);
+            return button;
+        }
+        Label^ CreateLabel(String^ text) {
+            Label^ label = gcnew Label();
+            label->Text = text;
+            label->AutoSize = true;
+            label->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
+            return label;
         }
 
         void OnResize(Object^ sender, EventArgs^ e) {
-            AdjustButtonSizeAndPosition();
+            AdjustControlPositions();
         }
 
-        void AdjustButtonSizeAndPosition() {
-            // Réglage de la taille et de la position des boutons en fonction de la nouvelle taille de la fenêtre
+        void AdjustControlPositions() {
             int spacing = 20;
-            int buttonWidth = (this->Width - 3 * spacing) / 2;
-            int buttonHeight = 50;
-            int buttonY = (this->Height - buttonHeight) / 2;
+            int labelHeight = 20;
+            int textBoxHeight = 20;
+            int verticalSpacing = 10;
 
-            NewButton->Location = Point(spacing, buttonY);
-            NewButton->Size = Drawing::Size(buttonWidth, buttonHeight);
+            // Positionnement des labels et des TextBox
+            LabelArticleName->Location = Point(spacing, Title->Bottom + spacing);
+            TextBoxArticleName->Location = Point(spacing, LabelArticleName->Bottom + verticalSpacing);
+            TextBoxArticleName->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
 
-            ExistButton->Location = Point(2 * spacing + buttonWidth, buttonY);
-            ExistButton->Size = Drawing::Size(buttonWidth, buttonHeight);
+            LabelArticleAmount->Location = Point(spacing, TextBoxArticleName->Bottom + spacing);
+            TextBoxArticleAmount->Location = Point(spacing, LabelArticleAmount->Bottom + verticalSpacing);
+            TextBoxArticleAmount->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
+
+            LabelArticlePrice->Location = Point(spacing, TextBoxArticleAmount->Bottom + spacing);
+            TextBoxArticlePrice->Location = Point(spacing, LabelArticlePrice->Bottom + verticalSpacing);
+            TextBoxArticlePrice->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
+
+            // Réajuster la position du bouton de retour en bas à gauche
+            BackButton->Location = Point(spacing, this->Height - BackButton->Height - spacing);
+            ValidateButton->Location = Point(this->Width - ValidateButton->Width - spacing, this->Height - ValidateButton->Height - spacing);
         }
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnValidateButtonClicked(Object^ sender, EventArgs^ e) {
+           //Requete SQL pour ajouter le boug
         }
     };
 }

@@ -9,6 +9,7 @@ namespace Corbeille5 {
     public ref class PersonnelPanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ NewStaffButtonClicked;
         event EventHandler^ ExistingStaffButtonClicked;
 
         PersonnelPanel() {
@@ -38,7 +39,7 @@ namespace Corbeille5 {
 
             // Création et configuration du label
             Title = (gcnew Label());
-            Title->Text = L"Gestion du personnel";
+            Title->Text = L"Gestion des clients";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
             Title->Location = Point(-20, 20); // Positionnement du titre
@@ -56,6 +57,7 @@ namespace Corbeille5 {
             NewButton = (gcnew Button());
             NewButton->Text = L"Nouveau Personnel";
             NewButton->Size = Drawing::Size(150, 50);
+            NewButton->Click += gcnew EventHandler(this, &PersonnelPanel::OnNewButtonClicked);
 
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Personnel existant";
@@ -91,6 +93,9 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
+            NewStaffButtonClicked(sender, e);
         }
 
         void OnExistingStaffButtonClicked(Object^ sender, EventArgs^ e) {

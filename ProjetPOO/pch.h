@@ -8,5 +8,6 @@
 #define PCH_H
 
 #include "MyForm.h"
+#include "DatabaseManager.h"
 
 #endif //PCH_H

@@ -42,35 +42,7 @@ namespace ProjetPOO {
 	protected:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	private: System::ComponentModel::IContainer^ components;
-
+	private: System::Windows::Forms::Label^ label2;
 
 	private:
 		/// <summary>
@@ -85,29 +57,30 @@ namespace ProjetPOO {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
-			// label1
+			// button3
 			// 
-			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(276, 163);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(93, 32);
-			this->label1->TabIndex = 0;
-			this->label1->Text = L"label1";
-			this->label1->Click += gcnew System::EventHandler(this, &MyForm1::label1_Click_1);
+			this->button3->Location = System::Drawing::Point(24, 184);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(304, 98);
+			this->button3->TabIndex = 4;
+			this->button3->Text = L"button3";
+			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm1::button3_Click);
 			// 
-			// button2
+			// button4
 			// 
-			this->button2->Location = System::Drawing::Point(133, 417);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(132, 76);
-			this->button2->TabIndex = 2;
-			this->button2->Text = L"button2";
-			this->button2->UseVisualStyleBackColor = true;
+			this->button4->Location = System::Drawing::Point(355, 184);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(304, 98);
+			this->button4->TabIndex = 3;
+			this->button4->Text = L"button4";
+			this->button4->UseVisualStyleBackColor = true;
 			// 
 			// button1
 			// 
@@ -118,15 +91,25 @@ namespace ProjetPOO {
 			this->button1->Text = L"button1";
 			this->button1->UseVisualStyleBackColor = true;
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(248, 9);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(173, 25);
+			this->label1->TabIndex = 6;
+			this->label1->Text = L"Gestion du stock";
+			this->label1->Click += gcnew System::EventHandler(this, &MyForm1::label1_Click);
+			// 
 			// MyForm1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(16, 31);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(697, 643);
-			this->Controls->Add(this->button1);
-			this->Controls->Add(this->button2);
+			this->ClientSize = System::Drawing::Size(690, 406);
 			this->Controls->Add(this->label1);
-			this->Margin = System::Windows::Forms::Padding(4);
+			this->Controls->Add(this->button1);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->button4);
 			this->Name = L"MyForm1";
 			this->Text = L"MyForm1";
 			this->Load += gcnew System::EventHandler(this, &MyForm1::MyForm1_Load);
@@ -138,15 +121,6 @@ namespace ProjetPOO {
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void treeView1_AfterSelect(System::Object^ sender, System::Windows::Forms::TreeViewEventArgs^ e) {
-}
-
-private: System::Void MyForm1_Load(System::Object^ sender, System::EventArgs^ e) {
-}
-private: System::Void toolTip1_Popup(System::Object^ sender, System::Windows::Forms::PopupEventArgs^ e) {
-}
-private: System::Void label1_Click_1(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
