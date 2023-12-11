@@ -28,4 +28,8 @@ public:
     int GetClientAddressById(int clientId);
     bool CommandExist(String^ ref);
     void AddCommand(String^ ref,String^ datePaie,String^ dateReg, String^ dateLiv, String^ amountHT, String^ amountTVA,int clientId,int addressId);
+    void AddArticle(String^ name, String^ price, String^ amount, String^ sr);
+    bool ArticleExist(String^ name);
+    Dictionary<int, String^>^ GetAllArticles();
+    String^ GetArticleById(int articleId);
 };

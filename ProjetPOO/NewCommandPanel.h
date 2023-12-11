@@ -1,8 +1,9 @@
 #pragma once
 #include "DatabaseManager.h"
 #include "InfopersonnelForm.h"
+#include "AddArticleForm.h"
 using namespace System;
-using namespace System::Windows::Forms;
+using namespace System::Windows::Forms; 
 using namespace System::Drawing;
 
 namespace Corbeille5 {
@@ -16,6 +17,7 @@ namespace Corbeille5 {
             InitializeComponent();
             FillCountryComboBox();
             FillClientComboBox();
+            this->addedArticles = gcnew Dictionary<int, Tuple<String^, int>^>();
             this->Resize += gcnew EventHandler(this, &NewCommandPanel::OnResize);
         }
 
@@ -28,7 +30,7 @@ namespace Corbeille5 {
 
     private:
         System::ComponentModel::Container^ components;
-
+        Dictionary<int, Tuple<String^, int>^>^ addedArticles;
         // Left side controls
         Label^ labelRef;
         TextBox^ textBoxRef;
@@ -43,7 +45,8 @@ namespace Corbeille5 {
         Label^ labelMontantTVA;
         TextBox^ textBoxMontantTVA;
         Label^ labelArticles;
-        ComboBox^ comboBoxArticles;
+        ComboBox^ comboBoxAddedArticles;
+        Button^ buttonAddArticle;
 
         // Right side controls
         Label^ labelClient;
@@ -81,7 +84,17 @@ namespace Corbeille5 {
             this->labelMontantTVA = CreateLabel(L"Montant TVA");
             this->textBoxMontantTVA = CreateTextBox();
             this->labelArticles = CreateLabel(L"Articles");
-            this->comboBoxArticles = CreateComboBox();
+
+            this->comboBoxAddedArticles = gcnew ComboBox();
+            this->comboBoxAddedArticles->Location = Point(10, 250); // Ajustez selon votre mise en page
+            this->comboBoxAddedArticles->Size = Drawing::Size(200, 24);
+            this->comboBoxAddedArticles->DropDownStyle = ComboBoxStyle::DropDownList;
+
+            // Initialisation du bouton d'ajout d'article
+            this->buttonAddArticle = gcnew Button();
+            this->buttonAddArticle->Text = L"Ajouter un article";
+            this->buttonAddArticle->Location = Point(220, 250); // Ajustez selon votre mise en page
+            this->buttonAddArticle->Click += gcnew EventHandler(this, &NewCommandPanel::OnAddArticleClick);
 
             // Right side controls initialization
             this->labelClient = CreateLabel(L"Client");
@@ -208,7 +221,7 @@ namespace Corbeille5 {
             this->textBoxDeliveryDate->Clear();
             this->textBoxMontantHT->Clear();
             this->textBoxMontantTVA->Clear();
-            this->comboBoxArticles->SelectedIndex = -1;
+            this->comboBoxAddedArticles->SelectedIndex = -1;
 
             this->comboBoxClient->SelectedIndex = -1;
             //this->checkBoxIsSameAddress->
@@ -233,7 +246,8 @@ namespace Corbeille5 {
             this->Controls->Add(labelMontantTVA);
             this->Controls->Add(textBoxMontantTVA);
             this->Controls->Add(labelArticles);
-            this->Controls->Add(comboBoxArticles);
+            this->Controls->Add(comboBoxAddedArticles);
+            this->Controls->Add(buttonAddArticle);
 
             // Right side controls
             this->Controls->Add(labelClient);
@@ -295,8 +309,8 @@ namespace Corbeille5 {
             textBoxMontantTVA->Width = leftColumnWidth;
 
             labelArticles->Location = Point(margin, textBoxMontantTVA->Bottom + margin);
-            comboBoxArticles->Location = Point(margin, labelArticles->Bottom + margin);
-            comboBoxArticles->Width = leftColumnWidth;
+            comboBoxAddedArticles->Location = Point(margin, labelArticles->Bottom + margin);
+            comboBoxAddedArticles->Width = leftColumnWidth;
 
             // Position right column controls
             labelClient->Location = Point(this->Width / 2 + margin, margin);
@@ -338,6 +352,39 @@ namespace Corbeille5 {
                 FillCountryComboBox();
             }
         }
+        void NewCommandPanel::OnAddArticleClick(Object^ sender, EventArgs^ e) {
+            AddArticleForm^ addArticleForm = gcnew AddArticleForm();
+
+            if (addArticleForm->ShowDialog() == DialogResult::OK) {
+                Dictionary<int, int>^ selectedArticles = addArticleForm->SelectedArticlesQuantities;
+                DatabaseManager^ dbManager = gcnew DatabaseManager();
+
+                for each (KeyValuePair<int, int> article in selectedArticles) {
+                    String^ articleName = dbManager->GetArticleById(article.Key); // Obtenir le nom de l'article
+
+                    // Mise à jour ou ajout de l'article dans addedArticles
+                    if (!addedArticles->ContainsKey(article.Key)) {
+                        addedArticles->Add(article.Key, gcnew Tuple<String^, int>(articleName, article.Value));
+                    }
+                    else {
+                        int newQuantity = addedArticles[article.Key]->Item2 + article.Value;
+                        addedArticles[article.Key] = gcnew Tuple<String^, int>(articleName, newQuantity);
+                    }
+                }
+
+                UpdateAddedArticlesList();
+            }
+        }
+    
+        void NewCommandPanel::UpdateAddedArticlesList() {
+            comboBoxAddedArticles->Items->Clear();
+
+            for each (KeyValuePair<int, Tuple<String^, int>^> article in addedArticles) {
+                String^ displayText = article.Value->Item1 + " x" + article.Value->Item2;
+                comboBoxAddedArticles->Items->Add(displayText);
+            }
+        }
+        
         void CountrySelectionChanged(Object^ sender, EventArgs^ e) {
             FillCpComboBox();
         }

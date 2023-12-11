@@ -126,6 +126,9 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddArticleForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ClientPanel.h" />
     <ClInclude Include="CommandePanel.h" />
     <ClInclude Include="DatabaseManager.h" />
@@ -149,6 +152,7 @@
     <ClInclude Include="StockPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddArticleForm.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="InfopersonnelForm.cpp" />

@@ -3,7 +3,7 @@ using namespace System::Collections::Generic;
 
 DatabaseManager::DatabaseManager() {
     connectionString = "Data Source=LOVAUTHIER69D8\\MSSQL_LEO;"
-        "Initial Catalog=ProjetPOO;"
+        "Initial Catalog=ProjetPOOtest;"
         "Integrated Security=True;";
 }
 List<String^>^ DatabaseManager::ShowCountry() {
@@ -211,6 +211,75 @@ int DatabaseManager::AddAddress(String^ streetNumber, String^ streetName, String
     finally {
         if (connection->State == ConnectionState::Open)
             connection->Close();
+    }
+}
+void DatabaseManager::AddArticle(String^ name, String^ price, String^ amount, String^ sr) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "INSERT INTO article (ART_NOM, ART_MONT_UHC, ART_QTT, ART_SR) VALUES (@name, @price, @amount, @sr)";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->Add("@name", SqlDbType::VarChar)->Value = name;
+    command->Parameters->Add("@price", SqlDbType::Decimal)->Value = Decimal::Parse(price);
+    command->Parameters->Add("@amount", SqlDbType::Int)->Value = Int32::Parse(amount);
+    command->Parameters->Add("@sr", SqlDbType::Int)->Value = Int32::Parse(sr);
+    try {
+        connection->Open();
+        command->ExecuteNonQuery();
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+}
+Dictionary<int, String^>^ DatabaseManager::GetAllArticles() {
+    Dictionary<int, String^>^ articles = gcnew Dictionary<int, String^>();
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT ID_ARTICLE, ART_NOM FROM article";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+
+    try {
+        connection->Open();
+        SqlDataReader^ reader = command->ExecuteReader();
+
+        while (reader->Read()) {
+            int id = reader->GetInt32(0); // Index 0 pour ID_ARTICLE
+            String^ name = reader->GetString(1); // Index 1 pour ART_NOM
+            articles->Add(id, name);
+        }
+        reader->Close();
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        // Gérer les exceptions comme vous le souhaitez.
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+
+    return articles;
+}
+bool DatabaseManager::ArticleExist(String^ name) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT COUNT(*) FROM article WHERE ART_NOM = @name";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@name", name);
+
+    try {
+        connection->Open();
+        int count = Convert::ToInt32(command->ExecuteScalar());
+        return count > 0;
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return false;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open) {
+            connection->Close();
+        }
     }
 }
 void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId) {
@@ -449,6 +518,30 @@ bool DatabaseManager::ClientExists(String^ firstName, String^ lastName, String^ 
         if (connection->State == ConnectionState::Open)
             connection->Close();
     }
+}
+String^ DatabaseManager::GetArticleById(int articleId) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT ART_NOM FROM article WHERE ID_ARTICLE = @articleId";
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@articleId", articleId);
+
+    String^ articleName = "";
+
+    try {
+        connection->Open();
+        Object^ result = command->ExecuteScalar();
+        if (result != nullptr) {
+            articleName = result->ToString();
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open)
+            connection->Close();
+    }
+    return articleName;
 }
 
 

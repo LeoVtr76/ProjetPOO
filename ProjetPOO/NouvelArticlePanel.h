@@ -1,4 +1,6 @@
 #pragma once
+#include "DatabaseManager.h"
+#include "InfopersonnelForm.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -27,10 +29,12 @@ namespace Corbeille5 {
         Label^ Title;
         TextBox^ TextBoxArticleName;
         Label^ LabelArticleName;
-        TextBox^ TextBoxArticleAmount;
-        Label^ LabelArticleAmount;
         TextBox^ TextBoxArticlePrice;
         Label^ LabelArticlePrice;
+        TextBox^ TextBoxArticleAmount;
+        Label^ LabelArticleAmount;
+        Label^ LabelSeuilReap;
+        TextBox^ TextBoxSeuilReap;
         Button^ BackButton;
         Button^ ValidateButton;
 
@@ -62,21 +66,31 @@ namespace Corbeille5 {
             LabelArticleAmount = CreateLabel(L"Quantité de l'article");
             TextBoxArticlePrice = CreateTextBox();
             LabelArticlePrice = CreateLabel(L"Prix de l'article");
+            LabelSeuilReap = CreateLabel(L"Seuil de réapprovisionnement");
+            TextBoxSeuilReap = CreateTextBox();
 
             ValidateButton = CreateButton(L"Valider");
             ValidateButton->Click += gcnew System::EventHandler(this, &NewArticlePanel::OnValidateButtonClicked);
             // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
-            this->Controls->Add(BackButton);
             this->Controls->Add(TextBoxArticleName);
             this->Controls->Add(LabelArticleName);
-            this->Controls->Add(TextBoxArticleAmount);
-            this->Controls->Add(LabelArticleAmount);
             this->Controls->Add(TextBoxArticlePrice);
             this->Controls->Add(LabelArticlePrice);
+            this->Controls->Add(TextBoxArticleAmount);
+            this->Controls->Add(LabelArticleAmount);
+            this->Controls->Add(LabelSeuilReap);
+            this->Controls->Add(TextBoxSeuilReap);
+            this->Controls->Add(BackButton);
             this->Controls->Add(ValidateButton);
 
             AdjustControlPositions();
+        }
+        void ClearFields() {
+            this->TextBoxArticleName->Clear();
+            this->TextBoxArticlePrice->Clear();
+            this->TextBoxArticleAmount->Clear();
+            this->TextBoxSeuilReap->Clear();
         }
 
         TextBox^ CreateTextBox() {
@@ -114,13 +128,17 @@ namespace Corbeille5 {
             TextBoxArticleName->Location = Point(spacing, LabelArticleName->Bottom + verticalSpacing);
             TextBoxArticleName->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
 
-            LabelArticleAmount->Location = Point(spacing, TextBoxArticleName->Bottom + spacing);
+            LabelArticlePrice->Location = Point(spacing, TextBoxArticleName->Bottom + spacing);
+            TextBoxArticlePrice->Location = Point(spacing, LabelArticlePrice->Bottom + verticalSpacing);
+            TextBoxArticlePrice->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
+
+            LabelArticleAmount->Location = Point(spacing, TextBoxArticlePrice->Bottom + spacing);
             TextBoxArticleAmount->Location = Point(spacing, LabelArticleAmount->Bottom + verticalSpacing);
             TextBoxArticleAmount->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
 
-            LabelArticlePrice->Location = Point(spacing, TextBoxArticleAmount->Bottom + spacing);
-            TextBoxArticlePrice->Location = Point(spacing, LabelArticlePrice->Bottom + verticalSpacing);
-            TextBoxArticlePrice->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
+            LabelSeuilReap->Location = Point(spacing, TextBoxArticleAmount->Bottom + spacing);
+            TextBoxSeuilReap->Location = Point(spacing, LabelSeuilReap->Bottom + verticalSpacing);
+            TextBoxSeuilReap->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
 
             // Réajuster la position du bouton de retour en bas à gauche
             BackButton->Location = Point(spacing, this->Height - BackButton->Height - spacing);
@@ -131,7 +149,22 @@ namespace Corbeille5 {
             BackButtonClicked(this, e);
         }
         void OnValidateButtonClicked(Object^ sender, EventArgs^ e) {
-           //Requete SQL pour ajouter le boug
+            DatabaseManager^ dbManager = gcnew DatabaseManager();
+            String^ name = TextBoxArticleName->Text;
+            String^ price = TextBoxArticlePrice->Text;
+            String^ amount = TextBoxArticleAmount->Text;
+            String^ sr = TextBoxSeuilReap->Text;
+            InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
+            if (dbManager->ArticleExist(name)) {
+                messageForm->SetMessage("L'article existe déjà.");
+            }
+            else {
+                dbManager->AddArticle(name, price, amount, sr);;
+                messageForm->SetMessage("L'article à été ajouté avec succès !");
+                ClearFields();
+            }
+            messageForm->ShowDialog();
+            
         }
     };
 }
