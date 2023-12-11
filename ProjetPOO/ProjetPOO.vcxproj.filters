@@ -80,6 +80,9 @@
     <ClInclude Include="ArticleExistantPanel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="CLPersonnel.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ProjetPOO.cpp">
@@ -102,6 +105,9 @@
     </ClCompile>
     <ClCompile Include="AddArticleForm.cpp">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClCompile>
+    <ClCompile Include="CLPersonnel.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -260,6 +260,98 @@ int DatabaseManager::GetCommandByRef(String^ ref) {
         }
     }
 }
+List<CLPersonnel^>^ DatabaseManager::GetAllPersonnel() {
+    List<CLPersonnel^>^ list = gcnew List<CLPersonnel^>();
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    // Cette requête SQL inclut une jointure avec la table personnel pour obtenir les informations du supérieur hiérarchique
+    SqlCommand^ command = gcnew SqlCommand(
+        "SELECT p.ID_PERSONNEL, p.PERS_NOM, p.PERS_PRENOM, p.PERS_NH, p.PERS_DATE_EMB, "
+        "a.ADR_RUE, v.VIL_NOM, pa.PAYS_NOM, "
+        "sup.PERS_NOM + ' ' + sup.PERS_PRENOM AS Supérieur "
+        "FROM personnel p "
+        "JOIN adresse a ON p.ID_ADRESSE = a.ID_ADRESSE "
+        "JOIN ville v ON a.ID_VILLE = v.ID_VILLE "
+        "JOIN pays pa ON v.ID_PAYS = pa.ID_PAYS "
+        "LEFT JOIN personnel sup ON p.ID_PERSONNEL_1 = sup.ID_PERSONNEL", connection);
+
+    try {
+        connection->Open();
+        SqlDataReader^ reader = command->ExecuteReader();
+        while (reader->Read()) {
+            int id = reader->GetInt32(0);
+            String^ nom = reader->GetString(1);
+            String^ prenom = reader->GetString(2);
+            String^ nh = reader->GetString(3);
+            DateTime dateEmbauche = reader->GetDateTime(4);
+            String^ rue = reader->GetString(5);
+            String^ ville = reader->GetString(6);
+            String^ pays = reader->GetString(7);
+            String^ adresseComplete = String::Format("{0}, {1}, {2}", rue, ville, pays);
+            String^ supérieur = reader->IsDBNull(8) ? "N/A" : reader->GetString(8); // Gérer le cas où le supérieur n'est pas disponible
+
+            CLPersonnel^ p = gcnew CLPersonnel(id, nom, prenom, nh, dateEmbauche, supérieur, adresseComplete);
+            list->Add(p);
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open) {
+            connection->Close();
+        }
+    }
+    return list;
+}
+
+CLPersonnel^ DatabaseManager::GetPersonnelById(int personnelId) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    // Assurez-vous que cette requête SQL correspond à votre schéma de base de données et à vos besoins
+    SqlCommand^ command = gcnew SqlCommand(
+        "SELECT p.ID_PERSONNEL, p.PERS_NOM, p.PERS_PRENOM, p.PERS_NH, p.PERS_DATE_EMB, "
+        "a.ADR_RUE, v.VIL_NOM, pa.PAYS_NOM, "
+        "sup.PERS_NOM + ' ' + sup.PERS_PRENOM AS Supérieur "
+        "FROM personnel p "
+        "JOIN adresse a ON p.ID_ADRESSE = a.ID_ADRESSE "
+        "JOIN ville v ON a.ID_VILLE = v.ID_VILLE "
+        "JOIN pays pa ON v.ID_PAYS = pa.ID_PAYS "
+        "LEFT JOIN personnel sup ON p.ID_PERSONNEL_1 = sup.ID_PERSONNEL "
+        "WHERE p.ID_PERSONNEL = @PersonnelID", connection);
+
+    command->Parameters->AddWithValue("@PersonnelID", personnelId);
+
+    CLPersonnel^ personnel = nullptr;
+
+    try {
+        connection->Open();
+        SqlDataReader^ reader = command->ExecuteReader();
+        if (reader->Read()) {
+            int id = reader->GetInt32(0);
+            String^ nom = reader->GetString(1);
+            String^ prenom = reader->GetString(2);
+            String^ nh = reader->GetString(3);
+            DateTime dateEmbauche = reader->GetDateTime(4);
+            String^ rue = reader->GetString(5);
+            String^ ville = reader->GetString(6);
+            String^ pays = reader->GetString(7);
+            String^ adresseComplete = String::Format("{0}, {1}, {2}", rue, ville, pays);
+            String^ supérieur = reader->IsDBNull(8) ? "N/A" : reader->GetString(8);
+
+            personnel = gcnew CLPersonnel(id, nom, prenom, nh, dateEmbauche, supérieur, adresseComplete);
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open) {
+            connection->Close();
+        }
+    }
+
+    return personnel;
+}
+
 void DatabaseManager::AddCommandArticle(int commandId, int articleId, int quantity) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
     String^ commandText = "INSERT INTO article_commande (ID_COMMANDE, ID_ARTICLE, ART_COM_QTT) VALUES (@commandId, @articleId, @quantity)";
@@ -336,7 +428,7 @@ void DatabaseManager::AddPersonnel(String^ firstName, String^ lastName, String^ 
 
     String^ commandText = "INSERT INTO personnel (PERS_PRENOM, PERS_NOM, PERS_NH, PERS_DATE_EMB, ID_ADRESSE";
     if (managerId != -1) {
-        commandText += ", ID_SUPERIEUR";
+        commandText += ", ID_PERSONNEL_1";
     }
     commandText += ") VALUES (@firstName, @lastName, @hierarchyLevel, @hireDate, @addressId";
     if (managerId != -1) {
@@ -390,7 +482,6 @@ void DatabaseManager::AddClient(String^ firstName, String^ lastName, String^ bir
             connection->Close();
     }
 }
-
 Dictionary<String^, int>^ DatabaseManager::GetManagers() {
     Dictionary<String^, int>^ persDict = gcnew Dictionary<String^, int>();
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
@@ -404,7 +495,7 @@ Dictionary<String^, int>^ DatabaseManager::GetManagers() {
         da->Fill(dt);
 
         for each (DataRow ^ row in dt->Rows) {
-            String^ fullName = row["PRES_PRENOM"]->ToString() + " " + row["PRES_NOM"]->ToString();
+            String^ fullName = row["PERS_PRENOM"]->ToString() + " " + row["PERS_NOM"]->ToString();
             int persId = Convert::ToInt32(row["ID_PERSONNEL"]);
             persDict->Add(fullName, persId);
         }

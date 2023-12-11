@@ -1,5 +1,6 @@
 #pragma once
 #include <cliext/vector>
+#include "CLPersonnel.h"
 using namespace System;
 using namespace System::Data;
 using namespace System::Data::SqlClient;
@@ -34,4 +35,6 @@ public:
     String^ GetArticleById(int articleId);
     int GetCommandByRef(String^ ref);
     void AddCommandArticle(int commandId, int articleId, int quantity);
+    List<CLPersonnel^>^ GetAllPersonnel();
+    CLPersonnel^ GetPersonnelById(int personnelId);
 };

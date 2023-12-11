@@ -9,5 +9,6 @@
 
 #include "MyForm.h"
 #include "DatabaseManager.h"
+#include "CLPersonnel.h"
 
 #endif //PCH_H

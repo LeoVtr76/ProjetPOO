@@ -132,6 +132,7 @@
     <ClInclude Include="ArticleExistantPanel.h" />
     <ClInclude Include="ClientExistantPanel.h" />
     <ClInclude Include="ClientPanel.h" />
+    <ClInclude Include="CLPersonnel.h" />
     <ClInclude Include="CommandeExistantePanel.h" />
     <ClInclude Include="CommandePanel.h" />
     <ClInclude Include="DatabaseManager.h" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="AddArticleForm.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="CLPersonnel.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="InfopersonnelForm.cpp" />
     <ClCompile Include="MyForm.cpp" />

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "DeleteConfirmForm.h"
+#include "DatabaseManager.h"
+#include "CLPersonnel.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -17,6 +19,7 @@ namespace Corbeille5 {
 
 		PersonnelExistantPanel() {
 			InitializeComponent();
+			FillPersonnelList();
 			this->Resize += gcnew EventHandler(this, &PersonnelExistantPanel::OnResize);
 		}
 	protected:
@@ -28,7 +31,7 @@ namespace Corbeille5 {
 
 	private:
 		System::ComponentModel::Container^ components;
-
+		bool firstLoad = true;
 		Label^ Title;
 		ListBox^ listBox1;
 		Button^ BackButton;
@@ -76,6 +79,7 @@ namespace Corbeille5 {
 			listBox1->Size = Drawing::Size(200, 130);
 			listBox1->Location = Point(1, 11);
 			listBox1->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Bottom);
+			listBox1->SelectedIndexChanged += gcnew EventHandler(this, &PersonnelExistantPanel::OnListBoxSelectedIndexChanged);
 
 			checkBox = (gcnew CheckBox());
 			checkBox->TabIndex = 4;
@@ -219,6 +223,15 @@ namespace Corbeille5 {
 
 			AdjustButtonSizeAndPosition();
 		}
+		void FillPersonnelList() {
+			DatabaseManager^ dbManager = gcnew DatabaseManager();
+			List<CLPersonnel^>^ personnelList = dbManager->GetAllPersonnel();
+
+			listBox1->Items->Clear();
+			for each (CLPersonnel ^ personnel in personnelList) {
+				listBox1->Items->Add(personnel->GetId() + " " + personnel->GetNom() + " " + personnel->GetPrenom());
+			}
+		}
 
 
 		void OnResize(Object^ sender, EventArgs^ e) {
@@ -247,7 +260,38 @@ namespace Corbeille5 {
 		void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
 			BackButtonClicked(this, e);
 		}
+		void OnListBoxSelectedIndexChanged(Object^ sender, EventArgs^ e) {
+			if (listBox1->SelectedIndex != -1) {
+				DatabaseManager^ dbManager = gcnew DatabaseManager();
+				String^ item = listBox1->Items[listBox1->SelectedIndex]->ToString();
+				int firstSpaceIndex = item->IndexOf(' ');
+				int id;
+				if (firstSpaceIndex != -1) {
+					id = System::Convert::ToInt32(item->Substring(0, firstSpaceIndex));
+				}
+				int selectedPersonnelId = listBox1->SelectedIndex; // Vous devez déterminer comment obtenir l'ID du personnel sélectionné.
+				CLPersonnel^ selectedPersonnel = dbManager->GetPersonnelById(id);
 
+				if (selectedPersonnel != nullptr) {
+					// Maintenant, mettez à jour les TextBox avec les informations de personnel
+					NameBox->Text = selectedPersonnel->GetNom();
+					FirstNameBox->Text = selectedPersonnel->GetPrenom();
+					HiringDateBox->Text = selectedPersonnel->GetNiveauHierarchique(); //"NH";
+					HierarSupBox->Text = selectedPersonnel->GetDateEmbauche().ToString("dd/MM/yyyy"); //"Date";
+						
+					HierarLevelBox->Text = selectedPersonnel->GetSuperieurHierarchique(); //"Superieur";
+					Addrbox->Text = selectedPersonnel->GetAdresse();
+				}
+			}
+		}
+		void OnVisibleChanged(Object^ sender, EventArgs^ e) {
+			if (this->Visible) {
+				if (firstLoad) {
+					FillPersonnelList();
+					firstLoad = false;
+				}
+			}
+		}
 		void OnCheckBoxChecked(Object^ sender, EventArgs^ e) {
 			bool isEnabled = dynamic_cast<CheckBox^>(sender)->Checked;
 
