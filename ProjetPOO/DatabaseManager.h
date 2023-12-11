@@ -32,4 +32,6 @@ public:
     bool ArticleExist(String^ name);
     Dictionary<int, String^>^ GetAllArticles();
     String^ GetArticleById(int articleId);
+    int GetCommandByRef(String^ ref);
+    void AddCommandArticle(int commandId, int articleId, int quantity);
 };

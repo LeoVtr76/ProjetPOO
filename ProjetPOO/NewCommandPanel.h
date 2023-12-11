@@ -45,7 +45,7 @@ namespace Corbeille5 {
         Label^ labelMontantTVA;
         TextBox^ textBoxMontantTVA;
         Label^ labelArticles;
-        ComboBox^ comboBoxAddedArticles;
+        ListBox^ listBoxArticles;
         Button^ buttonAddArticle;
 
         // Right side controls
@@ -85,10 +85,11 @@ namespace Corbeille5 {
             this->textBoxMontantTVA = CreateTextBox();
             this->labelArticles = CreateLabel(L"Articles");
 
-            this->comboBoxAddedArticles = gcnew ComboBox();
-            this->comboBoxAddedArticles->Location = Point(10, 250); // Ajustez selon votre mise en page
-            this->comboBoxAddedArticles->Size = Drawing::Size(200, 24);
-            this->comboBoxAddedArticles->DropDownStyle = ComboBoxStyle::DropDownList;
+            this->listBoxArticles = gcnew ListBox();
+            this->listBoxArticles->Location = Point(10, 250);
+            this->listBoxArticles->Size = Drawing::Size(200, 100);
+            this->listBoxArticles->SelectionMode = SelectionMode::MultiExtended;
+            this->listBoxArticles->Anchor = AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right | AnchorStyles::Bottom;
 
             // Initialisation du bouton d'ajout d'article
             this->buttonAddArticle = gcnew Button();
@@ -221,7 +222,7 @@ namespace Corbeille5 {
             this->textBoxDeliveryDate->Clear();
             this->textBoxMontantHT->Clear();
             this->textBoxMontantTVA->Clear();
-            this->comboBoxAddedArticles->SelectedIndex = -1;
+            this->listBoxArticles->ClearSelected();
 
             this->comboBoxClient->SelectedIndex = -1;
             //this->checkBoxIsSameAddress->
@@ -246,7 +247,7 @@ namespace Corbeille5 {
             this->Controls->Add(labelMontantTVA);
             this->Controls->Add(textBoxMontantTVA);
             this->Controls->Add(labelArticles);
-            this->Controls->Add(comboBoxAddedArticles);
+            this->Controls->Add(listBoxArticles);
             this->Controls->Add(buttonAddArticle);
 
             // Right side controls
@@ -309,8 +310,12 @@ namespace Corbeille5 {
             textBoxMontantTVA->Width = leftColumnWidth;
 
             labelArticles->Location = Point(margin, textBoxMontantTVA->Bottom + margin);
-            comboBoxAddedArticles->Location = Point(margin, labelArticles->Bottom + margin);
-            comboBoxAddedArticles->Width = leftColumnWidth;
+            listBoxArticles->Location = Point(margin, labelArticles->Bottom + margin);
+            listBoxArticles->Width = leftColumnWidth;
+            listBoxArticles->Height = 100;
+
+            buttonAddArticle->Location = Point(margin, listBoxArticles->Bottom + margin);
+            buttonAddArticle->Width = leftColumnWidth;
 
             // Position right column controls
             labelClient->Location = Point(this->Width / 2 + margin, margin);
@@ -335,6 +340,7 @@ namespace Corbeille5 {
             labelAddress->Location = Point(this->Width / 2 + margin, comboBoxCity->Bottom + margin);
             textBoxAddress->Location = Point(this->Width / 2 + margin, labelAddress->Bottom + margin);
             textBoxAddress->Width = rightColumnWidth;
+
 
             // Position bottom controls
             buttonBack->Location = Point(margin, this->Height - buttonBack->Height - margin);
@@ -377,11 +383,11 @@ namespace Corbeille5 {
         }
     
         void NewCommandPanel::UpdateAddedArticlesList() {
-            comboBoxAddedArticles->Items->Clear();
+            listBoxArticles->Items->Clear();
 
             for each (KeyValuePair<int, Tuple<String^, int>^> article in addedArticles) {
                 String^ displayText = article.Value->Item1 + " x" + article.Value->Item2;
-                comboBoxAddedArticles->Items->Add(displayText);
+                listBoxArticles->Items->Add(displayText);
             }
         }
         
@@ -460,17 +466,27 @@ namespace Corbeille5 {
             String^ amountTVA = textBoxMontantTVA->Text;
             
             InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
-            if (dbManager->CommandExist(ref)) {
-                messageForm->SetMessage("La commande existe déjà.");
+            if (!dbManager->CommandExist(ref)) {
+                dbManager->AddCommand(ref, datePaie, dateReg, dateLiv, amountHT, amountTVA, clientId, addressId);
+                int commandId = dbManager->GetCommandByRef(ref);
+                if (commandId != -1) {
+                    for each (KeyValuePair<int, Tuple<String^, int>^> kvp in addedArticles) {
+                        dbManager->AddCommandArticle(commandId, kvp.Key, kvp.Value->Item2);
+                    }
+                    messageForm->SetMessage("La commande et les articles associés ont été ajoutés avec succès !");
+                }
+                else {
+                    messageForm->SetMessage("Erreur lors de la récupération de l'ID de la commande.");
+                }
             }
             else {
-                dbManager->AddCommand(ref, datePaie, dateReg, dateLiv, amountHT, amountTVA, clientId, addressId);
-                messageForm->SetMessage("La commande à été ajouté avec succès !");
-                ClearFields();
-                FillCountryComboBox();
-                FillClientComboBox();
+                messageForm->SetMessage("La commande existe déjà.");
             }
+
             messageForm->ShowDialog();
+            if (messageForm->DialogResult == System::Windows::Forms::DialogResult::OK) {
+                ClearFields();
+            }
         }
     };
 }

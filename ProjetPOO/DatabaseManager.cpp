@@ -233,6 +233,55 @@ void DatabaseManager::AddArticle(String^ name, String^ price, String^ amount, St
             connection->Close();
     }
 }
+int DatabaseManager::GetCommandByRef(String^ ref) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "SELECT ID_COMMANDE FROM commande WHERE COM_REF = @ref";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@ref", ref);
+
+    try {
+        connection->Open();
+        Object^ result = command->ExecuteScalar();
+        if (result != nullptr) {
+            return Convert::ToInt32(result);
+        }
+        else {
+            return -1;
+        }
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur : " + e->Message);
+        return -1;
+    }
+    finally {
+        if (connection->State == ConnectionState::Open) {
+            connection->Close();
+        }
+    }
+}
+void DatabaseManager::AddCommandArticle(int commandId, int articleId, int quantity) {
+    SqlConnection^ connection = gcnew SqlConnection(connectionString);
+    String^ commandText = "INSERT INTO article_commande (ID_COMMANDE, ID_ARTICLE, ART_COM_QTT) VALUES (@commandId, @articleId, @quantity)";
+
+    SqlCommand^ command = gcnew SqlCommand(commandText, connection);
+    command->Parameters->AddWithValue("@commandId", commandId);
+    command->Parameters->AddWithValue("@articleId", articleId);
+    command->Parameters->AddWithValue("@quantity", quantity);
+
+    try {
+        connection->Open();
+        command->ExecuteNonQuery();
+    }
+    catch (Exception^ e) {
+        Console::WriteLine("Erreur lors de l'ajout de l'article à la commande : " + e->Message);
+    }
+    finally {
+        if (connection->State == ConnectionState::Open) {
+            connection->Close();
+        }
+    }
+}
 Dictionary<int, String^>^ DatabaseManager::GetAllArticles() {
     Dictionary<int, String^>^ articles = gcnew Dictionary<int, String^>();
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
