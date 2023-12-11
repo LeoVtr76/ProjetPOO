@@ -13,6 +13,8 @@
 #include "ClientExistantPanel.h"
 #include "PersonnelExistantPanel.h"
 #include "ArticleExistantPanel.h"
+#include "StatisticPanel.h"
+#include "SimulationPanel.h"
 
 // Incluez ici les autres panels que vous avez.
 
@@ -29,6 +31,7 @@ namespace Corbeille5 {
             mainPanel->StockClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
             mainPanel->CommandClicked += gcnew System::EventHandler(this, &MyForm::ShowCommandPanel);
             mainPanel->ClientClicked += gcnew System::EventHandler(this, &MyForm::ShowClientPanel);
+            mainPanel->StatisticClicked += gcnew System::EventHandler(this, &MyForm::ShowStatisticPanel);
 
             this->MinimumSize = System::Drawing::Size(800, 600);
         }
@@ -163,6 +166,23 @@ namespace Corbeille5 {
             this->Controls->Clear();
             this->Controls->Add(clientExistantPanel);
             clientExistantPanel->Dock = DockStyle::Fill;
+        }
+
+        void ShowStatisticPanel(Object^ sender, EventArgs^ e) {
+            StatisticPanel^ statisticPanel = gcnew StatisticPanel();
+            statisticPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            statisticPanel->SimuButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowSimulationPanel);
+            this->Controls->Clear();
+            this->Controls->Add(statisticPanel);
+            statisticPanel->Dock = DockStyle::Fill;
+        }
+
+        void ShowSimulationPanel(Object^ sender, EventArgs^ e) {
+            SimulationPanel^ simulationPanel = gcnew SimulationPanel();
+            simulationPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowStatisticPanel);
+            this->Controls->Clear();
+            this->Controls->Add(simulationPanel);
+            simulationPanel->Dock = DockStyle::Fill;
         }
 
         void ShowMainPanel(Object^ sender, EventArgs^ e) {

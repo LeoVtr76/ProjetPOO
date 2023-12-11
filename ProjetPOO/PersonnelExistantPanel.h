@@ -67,17 +67,17 @@ namespace Corbeille5 {
 			Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			BackButton = (gcnew Button());
-			BackButton->TabIndex = 13;
+			BackButton->TabIndex = 12;
 			BackButton->Text = L"Retour";
-			BackButton->Size = Drawing::Size(75, 23);
-			BackButton->Location = Point(this->Width - BackButton->Width - 10, 25);
-			BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
+			BackButton->Size = Drawing::Size(75, 25);
+			BackButton->Location = Point(35, 115);
+			BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
 			BackButton->Click += gcnew EventHandler(this, &PersonnelExistantPanel::OnBackButtonClicked);
 
 			listBox1 = (gcnew ListBox());
 			listBox1->TabIndex = 1;
-			listBox1->Size = Drawing::Size(200, 130);
-			listBox1->Location = Point(1, 11);
+			listBox1->Size = Drawing::Size(150, 80);
+			listBox1->Location = Point(5, 20);
 			listBox1->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Bottom);
 			listBox1->SelectedIndexChanged += gcnew EventHandler(this, &PersonnelExistantPanel::OnListBoxSelectedIndexChanged);
 
