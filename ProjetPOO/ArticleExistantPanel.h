@@ -52,24 +52,24 @@ namespace Corbeille5 {
 			this->Dock = DockStyle::Fill;
 
 			Title = (gcnew Label());
-			Title->Text = L"Clients Existants";
+			Title->Text = L"Articles Existants";
 			Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
 			Title->AutoSize = true;
-			Title->Location = Point(-20, 40);
+			Title->Location = Point(-20, 20);
 			Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			BackButton = (gcnew Button());
-			BackButton->TabIndex = 11;
+			BackButton->TabIndex = 12;
 			BackButton->Text = L"Retour";
-			BackButton->Size = Drawing::Size(75, 23);
-			BackButton->Location = Point(this->Width - BackButton->Width - 10, 25);
-			BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Right);
+			BackButton->Size = Drawing::Size(75, 25);
+			BackButton->Location = Point(35, 115);
+			BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
 			BackButton->Click += gcnew EventHandler(this, &ExistingArticlePanel::OnBackButtonClicked);
 
 			listBox1 = (gcnew ListBox());
 			listBox1->TabIndex = 1;
-			listBox1->Size = Drawing::Size(200, 130);
-			listBox1->Location = Point(1, 11);
+			listBox1-> Size = Drawing::Size(150, 80);
+			listBox1->Location = Point(5, 20);
 			listBox1->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Bottom);
 
 			checkBox = (gcnew CheckBox());

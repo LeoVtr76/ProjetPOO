@@ -4,6 +4,8 @@
 #include "StockPanel.h"
 #include "CommandePanel.h"
 #include "ClientPanel.h"
+#include "StatisticPanel.h"
+
 // Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
@@ -18,6 +20,7 @@ namespace Corbeille5 {
         event EventHandler^ StockClicked;
         event EventHandler^ CommandClicked;
         event EventHandler^ ClientClicked;
+        event EventHandler^ StatisticClicked;
      
         // Déclarez d'autres événements pour les différents boutons.
 
@@ -60,7 +63,8 @@ namespace Corbeille5 {
             stockButton->Click += gcnew EventHandler(this, &MainPanel::OnStockClicked);
             commandesButton = CreateButton(L"Gestion Commandes");
             commandesButton->Click += gcnew EventHandler(this, &MainPanel::OnCommandClicked);
-            statistiquesButton = CreateButton(L"Gestion Statistiques");
+            statistiquesButton = CreateButton(L"Statistiques");
+            statistiquesButton->Click += gcnew EventHandler(this, &MainPanel::OnStatisticClicked);
 
             // Ajout des boutons au TableLayoutPanel
             this->tableLayoutPanel->Controls->Add(personnelButton, 0, 0); // Colonne 0, Ligne 0
@@ -92,6 +96,9 @@ namespace Corbeille5 {
         }
         void OnClientClicked(Object^ sender, EventArgs^ e) {
             ClientClicked(sender, e);
+        }
+        void OnStatisticClicked(Object^ sender, EventArgs^ e) {
+            StatisticClicked(sender, e);
         }
 
         // Implémentez les gestionnaires d'événements On...Clicked pour les autres boutons.
