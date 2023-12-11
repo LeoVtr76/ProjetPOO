@@ -35,16 +35,14 @@ namespace Corbeille5 {
 			this->okButton = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 
-			// messageLabel
 			this->messageLabel->AutoSize = true;
-			this->messageLabel->Location = System::Drawing::Point(50, 50); // Adjust as needed
+			this->messageLabel->Location = System::Drawing::Point(50, 50);
 			this->messageLabel->Name = L"messageLabel";
-			this->messageLabel->Size = System::Drawing::Size(200, 40); // Adjust as needed
+			this->messageLabel->Size = System::Drawing::Size(200, 40);
 			this->messageLabel->TabIndex = 0;
 			this->messageLabel->Text = L"";
 
-			// okButton
-			this->okButton->Location = System::Drawing::Point(100, 200); // Adjust as needed
+			this->okButton->Location = System::Drawing::Point(100, 200); 
 			this->okButton->Name = L"okButton";
 			this->okButton->Size = System::Drawing::Size(75, 23);
 			this->okButton->TabIndex = 1;
@@ -52,7 +50,6 @@ namespace Corbeille5 {
 			this->okButton->UseVisualStyleBackColor = true;
 			this->okButton->Click += gcnew System::EventHandler(this, &InfopersonnelForm::okButton_Click);
 
-			// InfopersonnelForm
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(284, 261);

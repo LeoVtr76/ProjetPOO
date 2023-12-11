@@ -13,7 +13,6 @@ namespace Corbeille5 {
 
 		SimulationPanel() {
 			InitializeComponent();
-			// this->Resize += gcnew EventHandler(this, &SimulationPanel::OnResize);
 		}
 
 	protected:
@@ -36,7 +35,7 @@ namespace Corbeille5 {
 		TextBox^ ResultComValueStockBox;
 		Label^ Title;
 		Label^ PurchValueStockLab;
-		Label^ VATLAb;
+		Label^ VATLab;
 		Label^ SalesMarginLab;
 		Label^ TradeDiscLab;
 		Label^ UnknownMarkLab;
@@ -49,7 +48,7 @@ namespace Corbeille5 {
 			this->Dock = DockStyle::Fill;
 
 			BackButton = (gcnew Button());
-			BackButton->TabIndex = 12;
+			BackButton->TabIndex = 8;
 			BackButton->Text = L"Retour";
 			BackButton->Size = Drawing::Size(75, 25);
 			BackButton->Location = Point(35, 115);
@@ -57,7 +56,7 @@ namespace Corbeille5 {
 			BackButton->Click += gcnew EventHandler(this, &SimulationPanel::OnBackButtonClicked);
 
 			ValidButton = (gcnew Button());
-			ValidButton->TabIndex = 11;
+			ValidButton->TabIndex = 6;
 			ValidButton->Text = L"Valider";
 			ValidButton->Size = Drawing::Size(100, 40);
 			ValidButton->Font = gcnew Drawing::Font(L"Microsoft SansSerif", 10);
@@ -72,16 +71,20 @@ namespace Corbeille5 {
 			Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			PurchValueStockBox = (gcnew TextBox());
+			PurchValueStockBox->TabIndex = 1;
 			PurchValueStockBox->Size = Drawing::Size(100, 60);
 			PurchValueStockBox->Location = Point(this->Width - PurchValueStockBox->Width - 30, 120);
 			PurchValueStockBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			ResultComValueStockBox = (gcnew TextBox());
+			ResultComValueStockBox->TabIndex = 7;
 			ResultComValueStockBox->Size = Drawing::Size(100, 60);
 			ResultComValueStockBox->Location = Point(this->Width - ResultComValueStockBox->Width - 30, 450);
 			ResultComValueStockBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+			ResultComValueStockBox->ReadOnly = true;
 
 			VATBox = gcnew CheckedListBox();
+			VATBox->TabIndex = 2;
 			VATBox->FormattingEnabled = true;
 			VATBox->Items->AddRange(gcnew cli::array<Object^>(3) { L"TVA 1", L"TVA 2", L"TVA 3" });
 			VATBox->Location = Point(-140, 200);
@@ -89,6 +92,7 @@ namespace Corbeille5 {
 			VATBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			SalesMarginBox = gcnew CheckedListBox();
+			SalesMarginBox->TabIndex = 3;
 			SalesMarginBox->FormattingEnabled = true;
 			SalesMarginBox->Items->AddRange(gcnew cli::array<Object^>(3) { L"5%", L"10%", L"15%" });
 			SalesMarginBox->Location = Point(-140, 300);
@@ -96,6 +100,7 @@ namespace Corbeille5 {
 			SalesMarginBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			TradeDiscBox = gcnew CheckedListBox();
+			TradeDiscBox->TabIndex = 4;
 			TradeDiscBox->FormattingEnabled = true;
 			TradeDiscBox->Items->AddRange(gcnew cli::array<Object^>(2) { L"5%", L"6%"});
 			TradeDiscBox->Location = Point(160, 200);
@@ -103,6 +108,7 @@ namespace Corbeille5 {
 			TradeDiscBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
 			UnknownMarkBox = gcnew CheckedListBox();
+			UnknownMarkBox->TabIndex = 5;
 			UnknownMarkBox->FormattingEnabled = true;
 			UnknownMarkBox->Items->AddRange(gcnew cli::array<Object^>(3) { L"2%", L"3%", "5%" });
 			UnknownMarkBox->Location = Point(160, 300);
@@ -115,6 +121,36 @@ namespace Corbeille5 {
 			PurchValueStockLab->Location = Point(this->Width - PurchValueStockLab->Width - 30, 90);
 			PurchValueStockLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
+			VATLab = (gcnew Label());
+			VATLab->Text = L"TVA :";
+			VATLab->Size = Drawing::Size(100, 60);
+			VATLab->Location = Point(-140, 180);
+			VATLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+
+			SalesMarginLab = (gcnew Label());
+			SalesMarginLab->Text = L"Marge commerciale :";
+			SalesMarginLab->Size = Drawing::Size(120, 60);
+			SalesMarginLab->Location = Point(-140, 280);
+			SalesMarginLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+
+			TradeDiscLab = (gcnew Label());
+			TradeDiscLab->Text = L"Remise commerciale :";
+			TradeDiscLab->Size = Drawing::Size(120, 60);
+			TradeDiscLab->Location = Point(160, 180);
+			TradeDiscLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+
+			UnknownMarkLab = (gcnew Label());
+			UnknownMarkLab->Text = L"Démarque inconnue :";
+			UnknownMarkLab->Size = Drawing::Size(120, 60);
+			UnknownMarkLab->Location = Point(160, 280);
+			UnknownMarkLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+
+			ResultComValueStockLab = (gcnew Label());
+			ResultComValueStockLab->Text = L"Résultat de la valeur commerciale du stock :";
+			ResultComValueStockLab->Size = Drawing::Size(100, 60);
+			ResultComValueStockLab->Location = Point(this->Width - ResultComValueStockBox->Width - 30, 405);
+			ResultComValueStockLab->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
+
 
 			this->Controls->Add(Title);
 			this->Controls->Add(BackButton);
@@ -126,38 +162,16 @@ namespace Corbeille5 {
 			this->Controls->Add(PurchValueStockBox);
 			this->Controls->Add(ResultComValueStockBox);
 			this->Controls->Add(PurchValueStockLab);
-			this->Controls->Add(VATLAb);
+			this->Controls->Add(VATLab);
 			this->Controls->Add(SalesMarginLab);
 			this->Controls->Add(TradeDiscLab);
 			this->Controls->Add(UnknownMarkLab);
 			this->Controls->Add(ResultComValueStockLab);
 
-			//AdjustButtonSizeAndPosition();
 
 		}
 
-		/*void OnResize(Object^ sender, EventArgs^ e) {
-			AdjustButtonSizeAndPosition();
-		}
 
-		void AdjustButtonSizeAndPosition() {
-			int spacing = 20;
-			int textBoxHeight = 60;
-			int textBoxWidth = 150;
-			double scale = 0.5;
-
-			int newWidth = textBoxWidth + ((this->Width - 800) * scale);
-
-			newWidth = Math::Max(newWidth, textBoxHeight);
-
-			AverageBasketBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			TotalAmountCustBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			ComValueStockBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			StockPurchValueBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			MonthChoiceBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			YearChoiceBox->Size = Drawing::Size(newWidth, textBoxHeight);
-			TurnoverBox->Size = Drawing::Size(newWidth, textBoxHeight);
-		}*/
 
 		void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
 			BackButtonClicked(this, e);

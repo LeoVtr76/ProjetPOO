@@ -30,8 +30,8 @@ namespace Corbeille5 {
 
     private:
         System::ComponentModel::Container^ components;
+
         Dictionary<int, Tuple<String^, int>^>^ addedArticles;
-        // Left side controls
         Label^ labelRef;
         TextBox^ textBoxRef;
         Label^ labelPaiementDate;
@@ -47,8 +47,6 @@ namespace Corbeille5 {
         Label^ labelArticles;
         ListBox^ listBoxArticles;
         Button^ buttonAddArticle;
-
-        // Right side controls
         Label^ labelClient;
         ComboBox^ comboBoxClient;
         CheckBox^ checkBoxIsSameAddress;
@@ -60,17 +58,14 @@ namespace Corbeille5 {
         ComboBox^ comboBoxCity;
         Label^ labelAddress;
         TextBox^ textBoxAddress;
-
-        // Bottom controls
         Button^ buttonBack;
         Button^ buttonValidate;
 
         void InitializeComponent() {
+
             this->components = gcnew System::ComponentModel::Container();
             this->AutoSize = true;
             this->Dock = DockStyle::Fill;
-
-            // Left side controls initialization
             this->labelRef = CreateLabel(L"Réference");
             this->textBoxRef = CreateTextBox();
             this->labelPaiementDate = CreateLabel(L"Date de paiement");
@@ -84,20 +79,15 @@ namespace Corbeille5 {
             this->labelMontantTVA = CreateLabel(L"Montant TVA");
             this->textBoxMontantTVA = CreateTextBox();
             this->labelArticles = CreateLabel(L"Articles");
-
             this->listBoxArticles = gcnew ListBox();
             this->listBoxArticles->Location = Point(10, 250);
             this->listBoxArticles->Size = Drawing::Size(200, 100);
             this->listBoxArticles->SelectionMode = SelectionMode::MultiExtended;
             this->listBoxArticles->Anchor = AnchorStyles::Top | AnchorStyles::Left | AnchorStyles::Right | AnchorStyles::Bottom;
-
-            // Initialisation du bouton d'ajout d'article
             this->buttonAddArticle = gcnew Button();
             this->buttonAddArticle->Text = L"Ajouter un article";
             this->buttonAddArticle->Location = Point(220, 250); // Ajustez selon votre mise en page
             this->buttonAddArticle->Click += gcnew EventHandler(this, &NewCommandPanel::OnAddArticleClick);
-
-            // Right side controls initialization
             this->labelClient = CreateLabel(L"Client");
             this->comboBoxClient = CreateComboBox();
             this->comboBoxClient->DropDownStyle = ComboBoxStyle::DropDownList;
@@ -121,24 +111,19 @@ namespace Corbeille5 {
             this->comboBoxCity->Visible = false;
             this->labelAddress->Visible = false;
             this->textBoxAddress->Visible = false;
-
-            // Bottom controls initialization
             this->buttonBack = CreateButton(L"Retour");
             this->buttonBack->Click += gcnew EventHandler(this, &NewCommandPanel::OnBackButtonClicked);
             this->buttonValidate = CreateButton(L"Valider");
             this->buttonValidate->Click += gcnew EventHandler(this, &NewCommandPanel::OnValidateButtonClicked);
 
-            // Add controls to UserControl
             AddControlsToPanel();
 
-            // Initial layout
             PerformLayoutControls();
         }
         void FillCountryComboBox() {
             DatabaseManager^ dbManager = gcnew DatabaseManager();
             List<String^>^ countryList = dbManager->ShowCountry();
 
-            // Nettoyer et remplir le ComboBox
             this->comboBoxCountry->Items->Clear();
             for each (String ^ countryName in countryList) {
                 this->comboBoxCountry->Items->Add(countryName);
@@ -175,7 +160,6 @@ namespace Corbeille5 {
                 this->comboBoxCity->Items->Add(city);
             }
         }
-        // Helpers for creating controls
         Label^ CreateLabel(String^ text) {
             Label^ label = gcnew Label();
             label->Text = text;
@@ -215,7 +199,7 @@ namespace Corbeille5 {
             return button;
         }
         void ClearFields() {
-            // Clear all TextBoxes, reset ComboBoxes, etc.
+
             this->textBoxRef->Clear();
             this->textBoxPaiementDate->Clear();
             this->textBoxReglementDate->Clear();
@@ -223,17 +207,14 @@ namespace Corbeille5 {
             this->textBoxMontantHT->Clear();
             this->textBoxMontantTVA->Clear();
             this->listBoxArticles->ClearSelected();
-
             this->comboBoxClient->SelectedIndex = -1;
-            //this->checkBoxIsSameAddress->
             this->comboBoxCountry->SelectedIndex = -1;
             this->comboBoxPostalCode->SelectedIndex = -1;
             this->comboBoxCity->SelectedIndex = -1;
             this->textBoxAddress->Clear();
         }
-        // Adding controls to UserControl
         void AddControlsToPanel() {
-            // Left side controls
+
             this->Controls->Add(labelRef);
             this->Controls->Add(textBoxRef);
             this->Controls->Add(labelPaiementDate);
@@ -249,8 +230,6 @@ namespace Corbeille5 {
             this->Controls->Add(labelArticles);
             this->Controls->Add(listBoxArticles);
             this->Controls->Add(buttonAddArticle);
-
-            // Right side controls
             this->Controls->Add(labelClient);
             this->Controls->Add(comboBoxClient);
             this->Controls->Add(checkBoxIsSameAddress);
@@ -262,29 +241,23 @@ namespace Corbeille5 {
             this->Controls->Add(comboBoxCity);
             this->Controls->Add(labelAddress);
             this->Controls->Add(textBoxAddress);
-
-            // Bottom controls
             this->Controls->Add(buttonBack);
             this->Controls->Add(buttonValidate);
         }
 
-        // Resize event handler
         void OnResize(Object^ sender, EventArgs^ e) {
             PerformLayoutControls();
         }
 
-        // Layout controls on the panel
         void PerformLayoutControls() {
             int margin = 10;
             int labelHeight = 20;
             int textBoxHeight = 20;
             int verticalSpace = 30;
 
-            // Calculate column widths
             int leftColumnWidth = this->Width / 2 - 2 * margin;
             int rightColumnWidth = this->Width / 2 - 2 * margin;
 
-            // Position left column controls
             labelRef->Location = Point(margin, margin);
             textBoxRef->Location = Point(margin, labelRef->Bottom + margin);
             textBoxRef->Width = leftColumnWidth;
@@ -317,7 +290,6 @@ namespace Corbeille5 {
             buttonAddArticle->Location = Point(margin, listBoxArticles->Bottom + margin);
             buttonAddArticle->Width = leftColumnWidth;
 
-            // Position right column controls
             labelClient->Location = Point(this->Width / 2 + margin, margin);
             comboBoxClient->Location = Point(this->Width / 2 + margin, labelClient->Bottom + margin);
             comboBoxClient->Width = rightColumnWidth;
@@ -341,18 +313,13 @@ namespace Corbeille5 {
             textBoxAddress->Location = Point(this->Width / 2 + margin, labelAddress->Bottom + margin);
             textBoxAddress->Width = rightColumnWidth;
 
-
-            // Position bottom controls
             buttonBack->Location = Point(margin, this->Height - buttonBack->Height - margin);
             buttonValidate->Location = Point(this->Width - buttonValidate->Width - margin, this->Height - buttonValidate->Height - margin);
         }
         void comboBoxCountry_Validating(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
             String^ inputCountry = this->comboBoxCountry->Text;
 
-            // Vérifier si le pays saisi est déjà dans la liste
             if (this->comboBoxCountry->FindStringExact(inputCountry) == -1) {
-                // La valeur saisie n'est pas dans la liste
-                // Ajouter le nouveau pays à la base de données
                 DatabaseManager^ dbManager = gcnew DatabaseManager();
                 dbManager->AddCountry(inputCountry);
                 FillCountryComboBox();
@@ -366,9 +333,8 @@ namespace Corbeille5 {
                 DatabaseManager^ dbManager = gcnew DatabaseManager();
 
                 for each (KeyValuePair<int, int> article in selectedArticles) {
-                    String^ articleName = dbManager->GetArticleById(article.Key); // Obtenir le nom de l'article
+                    String^ articleName = dbManager->GetArticleById(article.Key); 
 
-                    // Mise à jour ou ajout de l'article dans addedArticles
                     if (!addedArticles->ContainsKey(article.Key)) {
                         addedArticles->Add(article.Key, gcnew Tuple<String^, int>(articleName, article.Value));
                     }
@@ -398,11 +364,9 @@ namespace Corbeille5 {
             String^ selectedPostalCode = this->comboBoxPostalCode->Text;
             FillCityComboBox();
         }
-        // Event handlers
         void OnCheckBoxChanged(Object^ sender, EventArgs^ e) {
             bool isAddressDifferent = this->checkBoxIsSameAddress->Checked;
 
-            // Activer ou désactiver les contrôles d'adresse
             this->labelCountry->Visible = isAddressDifferent;
             this->comboBoxCountry->Visible = isAddressDifferent;
             this->labelPostalCode->Visible = isAddressDifferent;
@@ -432,23 +396,19 @@ namespace Corbeille5 {
                 clientId = clientDict[selectedClientName];
             }
 
-            // Vérification des valeurs des ComboBox
             String^ country = comboBoxCountry->Text;
             String^ postalCode = comboBoxPostalCode->Text;
             String^ city = comboBoxCity->Text;
             int addressId;
             if (this->checkBoxIsSameAddress->Checked) {
-                // Ajouter le pays s'il n'existe pas
                 if (!dbManager->CheckCountry(country)) {
                     dbManager->AddCountry(country);
                 }
 
-                // Ajouter la ville et son code postal s'ils n'existent pas
                 if (!dbManager->CheckCity(country, city)) {
                     dbManager->AddCity(city, postalCode, country);
                 }
 
-                // Traitement et création de l'adresse
                 String^ address = textBoxAddress->Text;
                 array<String^>^ addressParts = address->Split(' ');
                 String^ streetNumber = addressParts[0];

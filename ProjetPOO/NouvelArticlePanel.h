@@ -39,27 +39,24 @@ namespace Corbeille5 {
         Button^ ValidateButton;
 
         void InitializeComponent() {
-            // Configuration du UserControl
+
             this->AutoSize = true;
             this->Dock = DockStyle::Fill;
 
-            // Création et configuration du label
             Title = (gcnew Label());
             Title->Text = L"Nouvel article";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(20, 20); // Positionnement du titre
+            Title->Location = Point(20, 20); 
             Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top | AnchorStyles::Left);
 
-            // Création et configuration du bouton de retour
             BackButton = (gcnew Button());
             BackButton->Text = L"Retour";
             BackButton->Size = Drawing::Size(75, 23);
-            BackButton->Location = Point(20, this->Height - 50); // Positionnement du bouton de retour
+            BackButton->Location = Point(20, this->Height - 50); 
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
             BackButton->Click += gcnew EventHandler(this, &NewArticlePanel::OnBackButtonClicked);
 
-            // Création des TextBox et des Label    
             TextBoxArticleName = CreateTextBox();
             LabelArticleName = CreateLabel(L"Nom de l'article");
             TextBoxArticleAmount = CreateTextBox();
@@ -71,7 +68,7 @@ namespace Corbeille5 {
 
             ValidateButton = CreateButton(L"Valider");
             ValidateButton->Click += gcnew System::EventHandler(this, &NewArticlePanel::OnValidateButtonClicked);
-            // Ajout des contrôles au UserControl
+
             this->Controls->Add(Title);
             this->Controls->Add(TextBoxArticleName);
             this->Controls->Add(LabelArticleName);
@@ -123,7 +120,6 @@ namespace Corbeille5 {
             int textBoxHeight = 20;
             int verticalSpacing = 10;
 
-            // Positionnement des labels et des TextBox
             LabelArticleName->Location = Point(spacing, Title->Bottom + spacing);
             TextBoxArticleName->Location = Point(spacing, LabelArticleName->Bottom + verticalSpacing);
             TextBoxArticleName->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
@@ -140,7 +136,6 @@ namespace Corbeille5 {
             TextBoxSeuilReap->Location = Point(spacing, LabelSeuilReap->Bottom + verticalSpacing);
             TextBoxSeuilReap->Size = Drawing::Size(this->Width - 2 * spacing, textBoxHeight);
 
-            // Réajuster la position du bouton de retour en bas à gauche
             BackButton->Location = Point(spacing, this->Height - BackButton->Height - spacing);
             ValidateButton->Location = Point(this->Width - ValidateButton->Width - spacing, this->Height - ValidateButton->Height - spacing);
         }

@@ -83,9 +83,6 @@
     <ClInclude Include="StatisticPanel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="MyForm1.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="SimulationPanel.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -113,9 +110,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClCompile>
     <ClCompile Include="AddArticleForm.cpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClCompile>
-    <ClCompile Include="MyForm1.cpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClCompile>
     <ClCompile Include="CLPersonnel.cpp">

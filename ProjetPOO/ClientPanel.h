@@ -35,27 +35,24 @@ namespace Corbeille5 {
         Button^ BackButton;
 
         void InitializeComponent() {
-            // Configuration du UserControl
+
             this->AutoSize = true;
             this->Dock = DockStyle::Fill;
 
-            // Création et configuration du label
             Title = (gcnew Label());
             Title->Text = L"Gestion des clients";
             Title->Font = gcnew Drawing::Font(L"Microsoft Sans Serif", 16, FontStyle::Bold);
             Title->AutoSize = true;
-            Title->Location = Point(-20, 20); // Positionnement du titre
+            Title->Location = Point(-20, 20); 
             Title->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
 
-            // Création et configuration du bouton de retour
             BackButton = (gcnew Button());
             BackButton->Text = L"Retour";
             BackButton->Size = Drawing::Size(75, 23);
-            BackButton->Location = Point(20, this->Height - 50); // Positionnement du bouton de retour
+            BackButton->Location = Point(20, this->Height - 50); 
             BackButton->Anchor = static_cast<AnchorStyles>(AnchorStyles::Bottom | AnchorStyles::Left);
             BackButton->Click += gcnew EventHandler(this, &ClientPanel::OnBackButtonClicked);
 
-            // Création et configuration des boutons NewButton et ExistButton
             NewButton = (gcnew Button());
             NewButton->Text = L"Nouveau client";
             NewButton->Size = Drawing::Size(150, 50);
@@ -66,7 +63,6 @@ namespace Corbeille5 {
             ExistButton->Size = Drawing::Size(150, 50);
             ExistButton->Click += gcnew EventHandler(this, &ClientPanel::OnExistingClientButtonClicked);
 
-            // Ajout des contrôles au UserControl
             this->Controls->Add(Title);
             this->Controls->Add(BackButton);
             this->Controls->Add(NewButton);
@@ -80,7 +76,6 @@ namespace Corbeille5 {
         }
 
         void AdjustButtonSizeAndPosition() {
-            // Réglage de la taille et de la position des boutons en fonction de la nouvelle taille de la fenêtre
             int spacing = 20;
             int buttonWidth = (this->Width - 3 * spacing) / 2;
             int buttonHeight = 50;

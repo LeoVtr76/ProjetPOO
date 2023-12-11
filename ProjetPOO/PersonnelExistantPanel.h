@@ -269,17 +269,16 @@ namespace Corbeille5 {
 				if (firstSpaceIndex != -1) {
 					id = System::Convert::ToInt32(item->Substring(0, firstSpaceIndex));
 				}
-				int selectedPersonnelId = listBox1->SelectedIndex; // Vous devez déterminer comment obtenir l'ID du personnel sélectionné.
+				int selectedPersonnelId = listBox1->SelectedIndex; 
 				CLPersonnel^ selectedPersonnel = dbManager->GetPersonnelById(id);
 
 				if (selectedPersonnel != nullptr) {
-					// Maintenant, mettez à jour les TextBox avec les informations de personnel
 					NameBox->Text = selectedPersonnel->GetNom();
 					FirstNameBox->Text = selectedPersonnel->GetPrenom();
-					HiringDateBox->Text = selectedPersonnel->GetNiveauHierarchique(); //"NH";
-					HierarSupBox->Text = selectedPersonnel->GetDateEmbauche().ToString("dd/MM/yyyy"); //"Date";
+					HiringDateBox->Text = selectedPersonnel->GetNiveauHierarchique(); 
+					HierarSupBox->Text = selectedPersonnel->GetDateEmbauche().ToString("dd/MM/yyyy"); 
 						
-					HierarLevelBox->Text = selectedPersonnel->GetSuperieurHierarchique(); //"Superieur";
+					HierarLevelBox->Text = selectedPersonnel->GetSuperieurHierarchique(); 
 					Addrbox->Text = selectedPersonnel->GetAdresse();
 				}
 			}

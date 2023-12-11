@@ -138,14 +138,12 @@ namespace Corbeille5 {
 			MonthChoiceBox->Size = Drawing::Size(150, 60);
 			MonthChoiceBox->Location = Point(this->Width - MonthChoiceBox->Width + 100, 180);
 			MonthChoiceBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
-			//MonthChoiceBox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 			YearChoiceBox = (gcnew ComboBox());
 			YearChoiceBox->TabIndex = 7;
 			YearChoiceBox->Size = Drawing::Size(150, 60);
 			YearChoiceBox->Location = Point(this->Width - YearChoiceBox->Width + 100, 280);
 			YearChoiceBox->Anchor = static_cast<AnchorStyles>(AnchorStyles::Top);
-			//YearChoiceBox->DropDownStyle = ComboBoxStyle::DropDownList;
 
 			SubTreshProductLab = (gcnew Label());
 			SubTreshProductLab->Text = L"Produit(s) sous le seuil de réapprovisionnement :";

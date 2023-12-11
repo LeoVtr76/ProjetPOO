@@ -6,7 +6,6 @@
 #include "ClientPanel.h"
 #include "StatisticPanel.h"
 
-// Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
 
@@ -22,7 +21,6 @@ namespace Corbeille5 {
         event EventHandler^ ClientClicked;
         event EventHandler^ StatisticClicked;
      
-        // Déclarez d'autres événements pour les différents boutons.
 
         MainPanel() {
             InitializeComponent();
@@ -30,7 +28,6 @@ namespace Corbeille5 {
 
     protected:
         ~MainPanel() {
-            // Nettoyage des ressources
         }
 
     private:
@@ -42,7 +39,7 @@ namespace Corbeille5 {
         Button^ statistiquesButton;
 
         void InitializeComponent() {
-            // Initialisation des boutons
+
             this->tableLayoutPanel = (gcnew TableLayoutPanel());
             this->tableLayoutPanel->ColumnCount = 2;
             this->tableLayoutPanel->RowCount = 3;
@@ -54,7 +51,6 @@ namespace Corbeille5 {
                 this->tableLayoutPanel->RowStyles->Add(gcnew RowStyle(SizeType::Percent, (i < 2) ? 33 : 34));
             }
 
-            // Initialisation des boutons
             personnelButton = CreateButton(L"Gestion Personnel");
             personnelButton->Click += gcnew EventHandler(this, &MainPanel::OnPersonnelClicked);
             clientsButton = CreateButton(L"Gestion Clients");
@@ -66,13 +62,12 @@ namespace Corbeille5 {
             statistiquesButton = CreateButton(L"Statistiques");
             statistiquesButton->Click += gcnew EventHandler(this, &MainPanel::OnStatisticClicked);
 
-            // Ajout des boutons au TableLayoutPanel
-            this->tableLayoutPanel->Controls->Add(personnelButton, 0, 0); // Colonne 0, Ligne 0
-            this->tableLayoutPanel->Controls->Add(clientsButton, 1, 0); // Colonne 1, Ligne 0
-            this->tableLayoutPanel->Controls->Add(stockButton, 0, 1); // Colonne 0, Ligne 1
-            this->tableLayoutPanel->Controls->Add(commandesButton, 1, 1); // Colonne 1, Ligne 1
-            this->tableLayoutPanel->Controls->Add(statistiquesButton, 0, 2); // Colonne 0, Ligne 2
-            this->tableLayoutPanel->SetColumnSpan(statistiquesButton, 2); // Le bouton s'étend sur 2 colonnes
+            this->tableLayoutPanel->Controls->Add(personnelButton, 0, 0); 
+            this->tableLayoutPanel->Controls->Add(clientsButton, 1, 0); 
+            this->tableLayoutPanel->Controls->Add(stockButton, 0, 1); 
+            this->tableLayoutPanel->Controls->Add(commandesButton, 1, 1); 
+            this->tableLayoutPanel->Controls->Add(statistiquesButton, 0, 2);
+            this->tableLayoutPanel->SetColumnSpan(statistiquesButton, 2); 
 
             this->Controls->Add(this->tableLayoutPanel);
         }
@@ -81,7 +76,6 @@ namespace Corbeille5 {
             button->Text = text;
             button->Dock = DockStyle::Fill;
             button->Margin = System::Windows::Forms::Padding(5);
-            // Vous pouvez ajouter des gestionnaires d'événements ici
             return button;
         }
         void OnPersonnelClicked(Object^ sender, EventArgs^ e) {
@@ -100,7 +94,5 @@ namespace Corbeille5 {
         void OnStatisticClicked(Object^ sender, EventArgs^ e) {
             StatisticClicked(sender, e);
         }
-
-        // Implémentez les gestionnaires d'événements On...Clicked pour les autres boutons.
     };
 }

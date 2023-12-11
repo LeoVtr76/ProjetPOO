@@ -35,7 +35,7 @@ namespace Corbeille5 {
 		void InitializeComponent() {
 			this->AutoSize = true;
 			this->Dock = DockStyle::Fill;
-			this->ClientSize = System::Drawing::Size(300, 100); // Taille de la fenêtre
+			this->ClientSize = System::Drawing::Size(300, 100); 
 
 
 			ConfirmLab = (gcnew Label());

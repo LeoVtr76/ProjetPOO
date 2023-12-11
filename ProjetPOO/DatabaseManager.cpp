@@ -18,7 +18,6 @@ List<String^>^ DatabaseManager::ShowCountry() {
         connection->Open();
         da->Fill(dt);
 
-        // Ajouter chaque pays à la liste
         for each (DataRow ^ row in dt->Rows) {
             String^ countryName = row["pays_nom"]->ToString();
             countryList->Add(countryName);
@@ -162,7 +161,6 @@ void DatabaseManager::AddCity(String^ cityName, String^ postalCode, String^ coun
         connection->Open();
         int countryId = (int)countryIdCommand->ExecuteScalar();
 
-        // Ensuite, insérez la ville
         String^ insertCityQuery = "INSERT INTO ville (VIL_NOM, VIL_CP, ID_PAYS) VALUES (@cityName, @postalCode, @countryId)";
         SqlCommand^ insertCityCommand = gcnew SqlCommand(insertCityQuery, connection);
         insertCityCommand->Parameters->AddWithValue("@cityName", cityName);
@@ -182,7 +180,6 @@ void DatabaseManager::AddCity(String^ cityName, String^ postalCode, String^ coun
 int DatabaseManager::AddAddress(String^ streetNumber, String^ streetName, String^ cityName){
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
 
-    // D'abord, trouvez l'ID de la ville
     String^ cityIdQuery = "SELECT ID_VILLE FROM ville WHERE VIL_NOM = @cityName";
     SqlCommand^ cityIdCommand = gcnew SqlCommand(cityIdQuery, connection);
     cityIdCommand->Parameters->AddWithValue("@cityName", cityName);
@@ -193,14 +190,12 @@ int DatabaseManager::AddAddress(String^ streetNumber, String^ streetName, String
         connection->Open();
         cityId = (int)cityIdCommand->ExecuteScalar();
 
-        // Ensuite, insérez l'adresse
         String^ insertAddressQuery = "INSERT INTO adresse (ADR_NUM_RUE, ADR_RUE, ID_VILLE) OUTPUT INSERTED.ID_ADRESSE VALUES (@streetNumber, @streetName, @cityId)";
         SqlCommand^ insertAddressCommand = gcnew SqlCommand(insertAddressQuery, connection);
         insertAddressCommand->Parameters->AddWithValue("@streetNumber", streetNumber);
         insertAddressCommand->Parameters->AddWithValue("@streetName", streetName);
         insertAddressCommand->Parameters->AddWithValue("@cityId", cityId);
 
-        // Récupérer et retourner l'ID de la nouvelle adresse
         int newAddressId = (int)insertAddressCommand->ExecuteScalar();
         return newAddressId;
     }
@@ -263,7 +258,7 @@ int DatabaseManager::GetCommandByRef(String^ ref) {
 List<CLPersonnel^>^ DatabaseManager::GetAllPersonnel() {
     List<CLPersonnel^>^ list = gcnew List<CLPersonnel^>();
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    // Cette requête SQL inclut une jointure avec la table personnel pour obtenir les informations du supérieur hiérarchique
+
     SqlCommand^ command = gcnew SqlCommand(
         "SELECT p.ID_PERSONNEL, p.PERS_NOM, p.PERS_PRENOM, p.PERS_NH, p.PERS_DATE_EMB, "
         "a.ADR_RUE, v.VIL_NOM, pa.PAYS_NOM, "
@@ -287,7 +282,7 @@ List<CLPersonnel^>^ DatabaseManager::GetAllPersonnel() {
             String^ ville = reader->GetString(6);
             String^ pays = reader->GetString(7);
             String^ adresseComplete = String::Format("{0}, {1}, {2}", rue, ville, pays);
-            String^ supérieur = reader->IsDBNull(8) ? "N/A" : reader->GetString(8); // Gérer le cas où le supérieur n'est pas disponible
+            String^ supérieur = reader->IsDBNull(8) ? "N/A" : reader->GetString(8);
 
             CLPersonnel^ p = gcnew CLPersonnel(id, nom, prenom, nh, dateEmbauche, supérieur, adresseComplete);
             list->Add(p);
@@ -306,7 +301,7 @@ List<CLPersonnel^>^ DatabaseManager::GetAllPersonnel() {
 
 CLPersonnel^ DatabaseManager::GetPersonnelById(int personnelId) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
-    // Assurez-vous que cette requête SQL correspond à votre schéma de base de données et à vos besoins
+
     SqlCommand^ command = gcnew SqlCommand(
         "SELECT p.ID_PERSONNEL, p.PERS_NOM, p.PERS_PRENOM, p.PERS_NH, p.PERS_DATE_EMB, "
         "a.ADR_RUE, v.VIL_NOM, pa.PAYS_NOM, "
@@ -385,15 +380,14 @@ Dictionary<int, String^>^ DatabaseManager::GetAllArticles() {
         SqlDataReader^ reader = command->ExecuteReader();
 
         while (reader->Read()) {
-            int id = reader->GetInt32(0); // Index 0 pour ID_ARTICLE
-            String^ name = reader->GetString(1); // Index 1 pour ART_NOM
+            int id = reader->GetInt32(0); 
+            String^ name = reader->GetString(1);
             articles->Add(id, name);
         }
         reader->Close();
     }
     catch (Exception^ e) {
         Console::WriteLine("Erreur : " + e->Message);
-        // Gérer les exceptions comme vous le souhaitez.
     }
     finally {
         if (connection->State == ConnectionState::Open)
@@ -550,12 +544,12 @@ int DatabaseManager::GetClientAddressById(int clientId) {
             return Convert::ToInt32(result);
         }
         else {
-            return -1; // Ou une autre valeur indiquant qu'aucune adresse n'a été trouvée
+            return -1; 
         }
     }
     catch (Exception^ e) {
         Console::WriteLine("Erreur : " + e->Message);
-        return -1; // Ou une autre valeur indiquant une erreur
+        return -1; 
     }
     finally {
         if (connection->State == ConnectionState::Open)
@@ -617,7 +611,7 @@ void DatabaseManager::AddCommand(String^ ref, String^ datePaie, String^ dateReg,
 bool DatabaseManager::PersonnelExists(String^ firstName, String^ lastName, String^ hireDate) {
     SqlConnection^ connection = gcnew SqlConnection(connectionString);
     String^ commandText = "SELECT COUNT(*) FROM personnel WHERE PERS_PRENOM = @firstName AND PERS_NOM = @lastName AND PERS_DATE_EMB = @hireDate";
-        //AND PERS_DATE_EMB = @hireDate";
+
     SqlCommand^ command = gcnew SqlCommand(commandText, connection);
     command->Parameters->AddWithValue("@firstName", firstName);
     command->Parameters->AddWithValue("@lastName", lastName);

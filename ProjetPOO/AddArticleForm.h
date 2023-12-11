@@ -32,19 +32,15 @@ namespace Corbeille5 {
             this->buttonCancel = (gcnew System::Windows::Forms::Button());
             this->selectedArticlesQuantities = gcnew Dictionary<int, int>();
 
-            // Configuration du dataGridViewArticles
             this->dataGridViewArticles->ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode::AutoSize;
             this->dataGridViewArticles->Columns->Add("Article", "Article");
             this->dataGridViewArticles->Columns->Add("Quantité", "Quantité");
             this->dataGridViewArticles->Dock = DockStyle::Fill;
 
-            // Ajout des boutons + et -
             AddPlusMinusButtons();
 
-            // Configuration des boutons 'Valider' et 'Annuler'
             ConfigureButtons();
 
-            // AddArticleForm
             ConfigureForm();
         }
 
@@ -69,21 +65,18 @@ namespace Corbeille5 {
         }
 
         void ConfigureButtons() {
-            // buttonValidate
+         
             this->buttonValidate->Text = L"Valider";
             this->buttonValidate->UseVisualStyleBackColor = true;
             this->buttonValidate->Click += gcnew System::EventHandler(this, &AddArticleForm::OnValidateButtonClick);
 
-            // buttonCancel
             this->buttonCancel->Text = L"Annuler";
             this->buttonCancel->UseVisualStyleBackColor = true;
             this->buttonCancel->Click += gcnew System::EventHandler(this, &AddArticleForm::OnCancelButtonClick);
-
-            // Positionnement des boutons
+  
             this->buttonValidate->Size = System::Drawing::Size(94, 23);
             this->buttonCancel->Size = System::Drawing::Size(94, 23);
 
-            // Ajout des boutons à la fenêtre
             this->Controls->Add(this->buttonValidate);
             this->Controls->Add(this->buttonCancel);
         }
@@ -98,12 +91,11 @@ namespace Corbeille5 {
             this->Name = L"AddArticleForm";
             this->Text = L"Ajouter des articles";
 
-            // Assurez-vous que les boutons 'Valider' et 'Annuler' sont visibles et correctement placés
             this->Load += gcnew System::EventHandler(this, &AddArticleForm::OnLoad);
         }
 
         void OnLoad(Object^ sender, EventArgs^ e) {
-            // Positionne les boutons 'Valider' et 'Annuler' en bas à droite et à gauche respectivement
+
             int spacing = 10;
             this->buttonValidate->Location = Point(this->ClientSize.Width - this->buttonValidate->Width - spacing, this->ClientSize.Height - this->buttonValidate->Height - spacing);
             this->buttonCancel->Location = Point(spacing, this->ClientSize.Height - this->buttonCancel->Height - spacing);
@@ -117,7 +109,7 @@ namespace Corbeille5 {
                 DataGridViewRow^ row = (gcnew DataGridViewRow());
                 row->CreateCells(this->dataGridViewArticles);
                 row->Cells[0]->Value = article.Value;
-                row->Cells[1]->Value = "0"; // Quantité initiale
+                row->Cells[1]->Value = "0";
                 row->Tag = article.Key;
                 this->dataGridViewArticles->Rows->Add(row);
             }
@@ -125,10 +117,10 @@ namespace Corbeille5 {
 
         void dataGridViewArticles_CellClick(Object^ sender, DataGridViewCellEventArgs^ e) {
             int articleId = safe_cast<int>(dataGridViewArticles->Rows[e->RowIndex]->Tag);
-            if (e->ColumnIndex == 2) { // Bouton '+'
+            if (e->ColumnIndex == 2) {
                 IncrementArticleQuantity(articleId);
             }
-            else if (e->ColumnIndex == 3) { // Bouton '-'
+            else if (e->ColumnIndex == 3) { 
                 DecrementArticleQuantity(articleId);
             }
         }

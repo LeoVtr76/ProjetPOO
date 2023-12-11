@@ -16,7 +16,6 @@
 #include "StatisticPanel.h"
 #include "SimulationPanel.h"
 
-// Incluez ici les autres panels que vous avez.
 
 namespace Corbeille5 {
 
@@ -26,7 +25,7 @@ namespace Corbeille5 {
     public:
         MyForm() {
             InitializeComponent();
-            //MainPanel event
+
             mainPanel->PersonnelClicked += gcnew System::EventHandler(this, &MyForm::ShowPersonnelPanel);
             mainPanel->StockClicked += gcnew System::EventHandler(this, &MyForm::ShowStockPanel);
             mainPanel->CommandClicked += gcnew System::EventHandler(this, &MyForm::ShowCommandPanel);
@@ -54,7 +53,7 @@ namespace Corbeille5 {
             this->mainPanel->Dock = DockStyle::Fill;
             this->Text = L"MyForm";
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-            this->ClientSize = System::Drawing::Size(800, 600); // Taille de la fenêtre
+            this->ClientSize = System::Drawing::Size(800, 600);
         }
 
         void ShowPersonnelPanel(Object^ sender, EventArgs^ e) {

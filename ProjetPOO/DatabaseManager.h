@@ -21,7 +21,6 @@ public:
     int AddAddress(String^ streetNumber, String^ streetName, String^ cityName);
     void AddPersonnel(String^ firstName, String^ lastName, String^ hierarchyLevel, String^ hireDate, int managerId, int addressId);
     void AddClient(String^ firstName, String^ lastName, String^ birthDate, int addressId);
-    //List<String^>^ GetManagers();
     Dictionary<String^, int>^ DatabaseManager::GetManagers();
     Dictionary<String^, int>^ DatabaseManager::GetClients();
     bool PersonnelExists(String^ firstName, String^ lastName, String^ hireDate);
