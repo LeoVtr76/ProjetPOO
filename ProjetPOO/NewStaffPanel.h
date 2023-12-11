@@ -109,12 +109,13 @@ namespace Corbeille5 {
         }
         void NewStaffPanel::FillManagerComboBox() {
             DatabaseManager^ dbManager = gcnew DatabaseManager();
-            List<String^>^ managerList = dbManager->GetManagers();
+            Dictionary<String^, int>^ persDict = dbManager->GetManagers();
 
             this->comboBoxManager->Items->Clear();
-            for each (String ^ fullName in managerList) {
-                this->comboBoxManager->Items->Add(fullName);
+            for each (KeyValuePair<String^, int> pers in persDict) {
+                this->comboBoxManager->Items->Add(pers.Key);
             }
+            this->comboBoxManager->Tag = persDict;
         }
         void FillCpComboBox() {
             String^ selectedCountry = this->comboBoxCountry->Text;
@@ -318,13 +319,11 @@ namespace Corbeille5 {
             String^ hierarchyLevel = textBoxHierarchyLevel->Text;
             String^ hireDate = textBoxHireDate->Text;
             int managerId = -1;
-            String^ managerFullName = comboBoxManager->Text;
-            if (!String::IsNullOrWhiteSpace(comboBoxManager->Text)) {
-                array<String^>^ nameParts = managerFullName->Split(' ');
-                if (nameParts->Length >= 2) {
-                    String^ managerFirstName = nameParts[0];
-                    String^ managerLastName = nameParts[1];
-                    managerId = dbManager->GetPersonnelId(managerFirstName, managerLastName);
+            if (comboBoxManager->SelectedIndex != -1) {
+                String^ managerFullName = comboBoxManager->Text;
+                Dictionary<String^, int>^ persDict = (Dictionary<String^, int>^)comboBoxManager->Tag;
+                if (persDict->ContainsKey(managerFullName)) {
+                    managerId = persDict[managerFullName];
                 }
             }
             InfopersonnelForm^ messageForm = gcnew InfopersonnelForm();
@@ -334,9 +333,10 @@ namespace Corbeille5 {
             else {
                 dbManager->AddPersonnel(firstName, lastName, hierarchyLevel, hireDate, managerId, addressId);
                 messageForm->SetMessage("Le personnel à été ajouté avec succès !");
+                ClearFields();
                 FillCountryComboBox();
                 FillManagerComboBox();
-                ClearFields();
+                
             }
             messageForm->ShowDialog();
         }

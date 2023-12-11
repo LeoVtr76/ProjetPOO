@@ -126,6 +126,9 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddArticleForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="ArticleExistantPanel.h" />
     <ClInclude Include="ClientExistantPanel.h" />
     <ClInclude Include="ClientPanel.h" />
@@ -141,6 +144,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="NewClientPanel.h" />
+    <ClInclude Include="NewCommandPanel.h" />
     <ClInclude Include="NewStaffPanel.h" />
     <ClInclude Include="NouvelArticlePanel.h" />
     <ClInclude Include="pch.h" />
@@ -150,6 +154,7 @@
     <ClInclude Include="StockPanel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddArticleForm.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="DatabaseManager.cpp" />
     <ClCompile Include="InfopersonnelForm.cpp" />

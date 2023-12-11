@@ -9,6 +9,7 @@ namespace Corbeille5 {
     public ref class CommandePanel : public UserControl {
     public:
         event EventHandler^ BackButtonClicked;
+        event EventHandler^ NewButtonClicked;
         event EventHandler^ ExistingCommandClicked;
 
         CommandePanel() {
@@ -56,6 +57,7 @@ namespace Corbeille5 {
             NewButton = (gcnew Button());
             NewButton->Text = L"Nouvelle Commande";
             NewButton->Size = Drawing::Size(150, 50);
+            NewButton->Click += gcnew EventHandler(this, &CommandePanel::OnNewButtonClicked);
 
             ExistButton = (gcnew Button());
             ExistButton->Text = L"Commande existante";
@@ -91,6 +93,9 @@ namespace Corbeille5 {
 
         void OnBackButtonClicked(Object^ sender, EventArgs^ e) {
             BackButtonClicked(this, e);
+        }
+        void OnNewButtonClicked(Object^ sender, EventArgs^ e) {
+            NewButtonClicked(sender, e);
         }
 
         void OnExistingCommandClicked(Object^ sender, EventArgs^ e) {

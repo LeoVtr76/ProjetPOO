@@ -7,6 +7,7 @@
 #include "NouvelArticlePanel.h"
 #include "NewStaffPanel.h"
 #include "NewClientPanel.h"
+#include "NewCommandPanel.h"
 #include "CommandeExistantePanel.h"
 #include "DeleteConfirmForm.h"
 #include "ClientExistantPanel.h"
@@ -107,10 +108,18 @@ namespace Corbeille5 {
         void ShowCommandPanel(Object^ sender, EventArgs^ e) {
             CommandePanel^ commandePanel = gcnew CommandePanel();
             commandePanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowMainPanel);
+            commandePanel->NewButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowNewCommandPanel);
             commandePanel->ExistingCommandClicked += gcnew EventHandler(this, &MyForm::ShowExistingCommandPanel);
             this->Controls->Clear();
             this->Controls->Add(commandePanel);
             commandePanel->Dock = DockStyle::Fill;
+        }
+        void ShowNewCommandPanel(Object^ sender, EventArgs^ e) {
+            NewCommandPanel^ newCommandPanel = gcnew NewCommandPanel();
+            newCommandPanel->BackButtonClicked += gcnew System::EventHandler(this, &MyForm::ShowCommandPanel);
+            this->Controls->Clear();
+            this->Controls->Add(newCommandPanel);
+            newCommandPanel->Dock = DockStyle::Fill;
         }
 
         void ShowExistingCommandPanel(Object^ sender, EventArgs^ e) {
